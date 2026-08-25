@@ -32,9 +32,11 @@ class AuthLocalDatasource {
 
     _cachedIdentity = PatientIdentity(
       id: 'PT-0001',
+      patientId: '',
       fullName: userName,
       email: email,
       phoneNumber: '0812-3456-7890',
+      medicalRecordNumber: 'PT-0001',
       familyMembers: const <String>['Budi Setiawan', 'Nina Setiawan'],
     );
 
@@ -51,9 +53,11 @@ class AuthLocalDatasource {
 
     _cachedIdentity = PatientIdentity(
       id: 'PT-0002',
+      patientId: '',
       fullName: fullName,
       email: email,
       phoneNumber: phoneNumber,
+      medicalRecordNumber: '',
       familyMembers: const <String>['Keluarga 1'],
     );
 

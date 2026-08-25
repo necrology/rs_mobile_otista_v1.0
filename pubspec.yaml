@@ -1,5 +1,5 @@
 name: rs_mobile_otista_v1_0
-description: "Aplikasi mobile RSUD Oto Iskandar Di Nata Kabupaten Bandung"
+description: "SIPANTES - Aplikasi mobile RSUD Oto Iskandar Di Nata Kabupaten Bandung"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -39,6 +39,10 @@ dependencies:
   google_fonts: ^6.3.0
   font_awesome_flutter: ^10.10.0
   http: ^1.6.0
+  flutter_secure_storage: ^9.2.4
+  open_filex: ^4.7.0
+  path_provider: ^2.1.6
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
@@ -54,32 +58,32 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
 
 flutter_native_splash:
-  color: "#F8F4EC"
-  image: assets/images/otista/logo_mark.png
+  color: "#41AB9F"
+  image: assets/images/otista/rsud_full_logo.png
   android: true
   ios: false
   web: false
   android_12:
-    color: "#F8F4EC"
-    image: assets/images/otista/logo_mark.png
+    color: "#41AB9F"
+    image: assets/images/otista/rsud_full_logo.png
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: assets/images/otista/logo_mark.png
+  image_path: assets/images/otista/rsud_full_logo.png
   remove_alpha_ios: true
   web:
     generate: true
-    image_path: assets/images/otista/logo_mark.png
-    background_color: "#B32025"
-    theme_color: "#B32025"
+    image_path: assets/images/otista/rsud_full_logo.png
+    background_color: "#41AB9F"
+    theme_color: "#1A4540"
   windows:
     generate: true
-    image_path: assets/images/otista/logo_mark.png
+    image_path: assets/images/otista/rsud_full_logo.png
     icon_size: 256
   macos:
     generate: true
-    image_path: assets/images/otista/logo_mark.png
+    image_path: assets/images/otista/rsud_full_logo.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

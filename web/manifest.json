@@ -1,11 +1,11 @@
 {
-    "name": "RSUD Otista Mobile",
-    "short_name": "Otista Mobile",
+    "name": "SIPANTES",
+    "short_name": "SIPANTES",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#B32025",
-    "theme_color": "#B32025",
-    "description": "Aplikasi mobile RSUD Oto Iskandar Di Nata Kabupaten Bandung.",
+    "background_color": "#41AB9F",
+    "theme_color": "#1A4540",
+    "description": "SIPANTES - Aplikasi mobile RSUD Oto Iskandar Di Nata Kabupaten Bandung.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,0 +1,1 @@
+enum RegistrationRequestResult { otpSent, accountAlreadyRegistered }

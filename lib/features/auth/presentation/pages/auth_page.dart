@@ -8,7 +8,10 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_background.dart';
 import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/brand_logo.dart';
+import '../../domain/entities/registration_request_result.dart';
 import '../cubit/auth_cubit.dart';
+
+enum _ExistingAccountAction { login, forgotPassword }
 
 class AuthPage extends StatefulWidget {
   const AuthPage({this.startWithRegister = false, super.key});
@@ -23,6 +26,7 @@ class _AuthPageState extends State<AuthPage> {
   final TextEditingController _loginEmailController = TextEditingController();
   final TextEditingController _loginPasswordController =
       TextEditingController();
+  final TextEditingController _loginOtpController = TextEditingController();
   final TextEditingController _registerNameController = TextEditingController();
   final TextEditingController _registerEmailController =
       TextEditingController();
@@ -30,15 +34,30 @@ class _AuthPageState extends State<AuthPage> {
       TextEditingController();
   final TextEditingController _registerPasswordController =
       TextEditingController();
+  final TextEditingController _registerOtpController = TextEditingController();
+  final TextEditingController _forgotIdentifierController =
+      TextEditingController();
+  final TextEditingController _forgotOtpController = TextEditingController();
+  final TextEditingController _forgotPasswordController =
+      TextEditingController();
+
+  bool _loginOtpSent = false;
+  bool _registerOtpSent = false;
+  bool _resetOtpSent = false;
 
   @override
   void dispose() {
     _loginEmailController.dispose();
     _loginPasswordController.dispose();
+    _loginOtpController.dispose();
     _registerNameController.dispose();
     _registerEmailController.dispose();
     _registerPhoneController.dispose();
     _registerPasswordController.dispose();
+    _registerOtpController.dispose();
+    _forgotIdentifierController.dispose();
+    _forgotOtpController.dispose();
+    _forgotPasswordController.dispose();
     super.dispose();
   }
 
@@ -49,7 +68,7 @@ class _AuthPageState extends State<AuthPage> {
 
     return DefaultTabController(
       initialIndex: widget.startWithRegister ? 1 : 0,
-      length: 2,
+      length: 3,
       child: Scaffold(
         backgroundColor: AppColors.scaffoldBackground,
         body: AppBackground(
@@ -84,7 +103,7 @@ class _AuthPageState extends State<AuthPage> {
                                   indicatorSize: TabBarIndicatorSize.tab,
                                   dividerColor: Colors.transparent,
                                   indicator: BoxDecoration(
-                                    color: AppColors.primaryRed,
+                                    gradient: AppColors.brandGradient,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   labelColor: Colors.white,
@@ -92,33 +111,35 @@ class _AuthPageState extends State<AuthPage> {
                                   tabs: const <Widget>[
                                     Tab(text: 'Login'),
                                     Tab(text: 'Registrasi'),
+                                    Tab(text: 'Lupa'),
                                   ],
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.medium),
                               SizedBox(
-                                height: 430,
+                                height: 560,
                                 child: TabBarView(
                                   children: <Widget>[
                                     _AuthFormLayout(
                                       title: 'Masuk ke akun pasien',
                                       subtitle:
-                                          'Gunakan email dan password untuk membuka layanan personal Anda.',
-                                      buttonLabel: 'Masuk',
+                                          'Gunakan email akun atau No. RM yang sudah terhubung. OTP dikirim ke email terdaftar.',
+                                      buttonLabel: _loginOtpSent
+                                          ? 'Verifikasi OTP'
+                                          : 'Kirim OTP Login',
                                       footerText:
-                                          'Guest mode tetap bisa melihat informasi rumah sakit tanpa login.',
+                                          'Kode OTP berlaku 5 menit dan menjaga akun pasien tetap aman.',
                                       isLoading: state.isSubmitting,
                                       children: <Widget>[
                                         TextField(
                                           controller: _loginEmailController,
-                                          keyboardType:
-                                              TextInputType.emailAddress,
+                                          keyboardType: TextInputType.text,
                                           textInputAction: TextInputAction.next,
                                           decoration: const InputDecoration(
-                                            labelText: 'Email',
-                                            hintText: 'nama@email.com',
+                                            labelText: 'Email atau No. RM',
+                                            hintText: 'nama@email.com / 074502',
                                             prefixIcon: Icon(
-                                              Icons.mail_outline_rounded,
+                                              Icons.badge_outlined,
                                             ),
                                           ),
                                         ),
@@ -128,7 +149,9 @@ class _AuthPageState extends State<AuthPage> {
                                         TextField(
                                           controller: _loginPasswordController,
                                           obscureText: true,
-                                          textInputAction: TextInputAction.done,
+                                          textInputAction: _loginOtpSent
+                                              ? TextInputAction.next
+                                              : TextInputAction.done,
                                           decoration: const InputDecoration(
                                             labelText: 'Password',
                                             hintText:
@@ -138,40 +161,75 @@ class _AuthPageState extends State<AuthPage> {
                                             ),
                                           ),
                                         ),
+                                        if (_loginOtpSent) ...<Widget>[
+                                          const SizedBox(
+                                            height: AppSpacing.medium,
+                                          ),
+                                          TextField(
+                                            controller: _loginOtpController,
+                                            keyboardType: TextInputType.number,
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Kode OTP',
+                                              hintText: '6 digit dari email',
+                                              prefixIcon: Icon(
+                                                Icons.verified_user_outlined,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ],
                                       onSubmit: () async {
-                                        final String email =
+                                        final String identifier =
                                             _loginEmailController.text.trim();
                                         final String password =
                                             _loginPasswordController.text
                                                 .trim();
 
-                                        if (email.isEmpty || password.isEmpty) {
+                                        if (identifier.isEmpty ||
+                                            password.isEmpty) {
                                           showAppSnackBar(
                                             context,
-                                            'Email dan password wajib diisi.',
+                                            'Email/No. RM dan password wajib diisi.',
                                           );
                                           return;
                                         }
 
-                                        final bool isSuccess = await authCubit
-                                            .signIn(
-                                              email: email,
-                                              password: password,
-                                            );
+                                        final bool isSuccess = _loginOtpSent
+                                            ? await authCubit.verifyLoginOtp(
+                                                identifier: identifier,
+                                                otp: _loginOtpController.text
+                                                    .trim(),
+                                              )
+                                            : await authCubit.requestLoginOtp(
+                                                identifier: identifier,
+                                                password: password,
+                                              );
 
                                         if (!context.mounted) {
                                           return;
                                         }
 
                                         if (isSuccess) {
-                                          if (Navigator.of(context).canPop()) {
+                                          if (!_loginOtpSent) {
+                                            setState(() {
+                                              _loginOtpSent = true;
+                                            });
+                                            showAppSnackBar(
+                                              context,
+                                              'Permintaan OTP login diterima. Periksa Inbox atau Spam email Anda.',
+                                            );
+                                          } else if (Navigator.of(
+                                            context,
+                                          ).canPop()) {
                                             Navigator.of(context).pop();
                                           }
                                         } else {
                                           showAppSnackBar(
                                             context,
-                                            'Login belum berhasil. Silakan coba lagi.',
+                                            authCubit.state.errorMessage ??
+                                                'Login belum berhasil. Silakan coba lagi.',
                                           );
                                         }
                                       },
@@ -179,10 +237,12 @@ class _AuthPageState extends State<AuthPage> {
                                     _AuthFormLayout(
                                       title: 'Buat akun pasien baru',
                                       subtitle:
-                                          'Isi data dasar terlebih dahulu. Tampilan dibuat lebih ringkas agar cepat diisi.',
-                                      buttonLabel: 'Daftar Sekarang',
+                                          'Gunakan email aktif. Jika sudah memiliki akun, lanjutkan melalui Login atau Lupa Password.',
+                                      buttonLabel: _registerOtpSent
+                                          ? 'Verifikasi OTP'
+                                          : 'Minta OTP Registrasi',
                                       footerText:
-                                          'Setelah registrasi, Anda bisa mulai booking, konsultasi, dan melihat data personal.',
+                                          'Permintaan dibuat secara aman tanpa mengungkap status akun. Periksa Inbox/Spam jika email belum pernah terdaftar.',
                                       isLoading: state.isSubmitting,
                                       children: <Widget>[
                                         TextField(
@@ -235,16 +295,35 @@ class _AuthPageState extends State<AuthPage> {
                                           controller:
                                               _registerPasswordController,
                                           obscureText: true,
-                                          textInputAction: TextInputAction.done,
+                                          textInputAction: _registerOtpSent
+                                              ? TextInputAction.next
+                                              : TextInputAction.done,
                                           decoration: const InputDecoration(
                                             labelText: 'Password',
                                             hintText:
-                                                'Minimal mudah Anda ingat',
+                                                '8–72 karakter, huruf dan angka',
                                             prefixIcon: Icon(
                                               Icons.lock_outline_rounded,
                                             ),
                                           ),
                                         ),
+                                        if (_registerOtpSent) ...<Widget>[
+                                          const SizedBox(
+                                            height: AppSpacing.medium,
+                                          ),
+                                          TextField(
+                                            controller: _registerOtpController,
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                              labelText: 'OTP Email',
+                                              hintText:
+                                                  'Kode dari email rumah sakit',
+                                              prefixIcon: Icon(
+                                                Icons.mark_email_read_outlined,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ],
                                       onSubmit: () async {
                                         final String fullName =
@@ -270,11 +349,68 @@ class _AuthPageState extends State<AuthPage> {
                                           return;
                                         }
 
+                                        if (!_isValidNewPassword(password)) {
+                                          showAppSnackBar(
+                                            context,
+                                            'Password harus 8–72 karakter dan mengandung huruf serta angka.',
+                                          );
+                                          return;
+                                        }
+
+                                        final String registrationOtp =
+                                            _registerOtpController.text.trim();
+                                        if (_registerOtpSent &&
+                                            !_isValidOtp(registrationOtp)) {
+                                          showAppSnackBar(
+                                            context,
+                                            'OTP harus terdiri dari 6 digit angka.',
+                                          );
+                                          return;
+                                        }
+
+                                        if (!_registerOtpSent) {
+                                          final RegistrationRequestResult?
+                                          result = await authCubit.register(
+                                            fullName: fullName,
+                                            email: email,
+                                            phoneNumber: phone,
+                                          );
+
+                                          if (!context.mounted) {
+                                            return;
+                                          }
+
+                                          if (result ==
+                                              RegistrationRequestResult
+                                                  .otpSent) {
+                                            setState(() {
+                                              _registerOtpSent = true;
+                                            });
+                                            showAppSnackBar(
+                                              context,
+                                              'Permintaan OTP registrasi diterima. Periksa Inbox atau Spam email Anda.',
+                                            );
+                                          } else if (result ==
+                                              RegistrationRequestResult
+                                                  .accountAlreadyRegistered) {
+                                            await _showExistingAccountDialog(
+                                              context,
+                                              email,
+                                            );
+                                          } else {
+                                            showAppSnackBar(
+                                              context,
+                                              authCubit.state.errorMessage ??
+                                                  'Registrasi belum berhasil. Silakan coba lagi.',
+                                            );
+                                          }
+                                          return;
+                                        }
+
                                         final bool isSuccess = await authCubit
-                                            .register(
-                                              fullName: fullName,
+                                            .verifyRegistrationOtp(
                                               email: email,
-                                              phoneNumber: phone,
+                                              otp: registrationOtp,
                                               password: password,
                                             );
 
@@ -282,14 +418,161 @@ class _AuthPageState extends State<AuthPage> {
                                           return;
                                         }
 
-                                        if (isSuccess) {
-                                          if (Navigator.of(context).canPop()) {
-                                            Navigator.of(context).pop();
-                                          }
+                                        if (isSuccess &&
+                                            Navigator.of(context).canPop()) {
+                                          Navigator.of(context).pop();
+                                        } else if (!isSuccess) {
+                                          showAppSnackBar(
+                                            context,
+                                            authCubit.state.errorMessage ??
+                                                'Registrasi belum berhasil. Silakan coba lagi.',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    _AuthFormLayout(
+                                      title: 'Atur ulang password',
+                                      subtitle:
+                                          'Masukkan email akun. OTP reset akan dikirim ke email terdaftar.',
+                                      buttonLabel: _resetOtpSent
+                                          ? 'Simpan Password Baru'
+                                          : 'Kirim OTP Reset',
+                                      footerText:
+                                          'Gunakan password baru setelah OTP berhasil diverifikasi.',
+                                      isLoading: state.isSubmitting,
+                                      children: <Widget>[
+                                        TextField(
+                                          controller:
+                                              _forgotIdentifierController,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          textInputAction: TextInputAction.next,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Email',
+                                            hintText: 'nama@email.com',
+                                            prefixIcon: Icon(
+                                              Icons.mail_outline_rounded,
+                                            ),
+                                          ),
+                                        ),
+                                        if (_resetOtpSent) ...<Widget>[
+                                          const SizedBox(
+                                            height: AppSpacing.medium,
+                                          ),
+                                          TextField(
+                                            controller: _forgotOtpController,
+                                            keyboardType: TextInputType.number,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            decoration: const InputDecoration(
+                                              labelText: 'OTP Reset',
+                                              hintText: '6 digit dari email',
+                                              prefixIcon: Icon(
+                                                Icons.password_outlined,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: AppSpacing.medium,
+                                          ),
+                                          TextField(
+                                            controller:
+                                                _forgotPasswordController,
+                                            obscureText: true,
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Password baru',
+                                              prefixIcon: Icon(
+                                                Icons.lock_reset_rounded,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                      onSubmit: () async {
+                                        final String identifier =
+                                            _forgotIdentifierController.text
+                                                .trim();
+                                        if (identifier.isEmpty) {
+                                          showAppSnackBar(
+                                            context,
+                                            'Email wajib diisi.',
+                                          );
+                                          return;
+                                        }
+
+                                        if (_resetOtpSent &&
+                                            (_forgotOtpController.text
+                                                    .trim()
+                                                    .isEmpty ||
+                                                _forgotPasswordController.text
+                                                    .trim()
+                                                    .isEmpty)) {
+                                          showAppSnackBar(
+                                            context,
+                                            'OTP dan password baru wajib diisi.',
+                                          );
+                                          return;
+                                        }
+
+                                        final String newPassword =
+                                            _forgotPasswordController.text
+                                                .trim();
+                                        if (_resetOtpSent &&
+                                            !_isValidNewPassword(newPassword)) {
+                                          showAppSnackBar(
+                                            context,
+                                            'Password harus 8–72 karakter dan mengandung huruf serta angka.',
+                                          );
+                                          return;
+                                        }
+
+                                        final bool isSuccess = _resetOtpSent
+                                            ? await authCubit.resetPassword(
+                                                identifier: identifier,
+                                                otp: _forgotOtpController.text
+                                                    .trim(),
+                                                password: newPassword,
+                                              )
+                                            : await authCubit
+                                                  .requestPasswordResetOtp(
+                                                    identifier: identifier,
+                                                  );
+
+                                        if (!context.mounted) {
+                                          return;
+                                        }
+
+                                        if (isSuccess && !_resetOtpSent) {
+                                          setState(() {
+                                            _resetOtpSent = true;
+                                            _forgotOtpController.clear();
+                                            _forgotPasswordController.clear();
+                                          });
+                                          showAppSnackBar(
+                                            context,
+                                            'Permintaan OTP reset diterima. Jika email terdaftar, OTP akan dikirim. Periksa Inbox atau Spam.',
+                                          );
+                                        } else if (isSuccess) {
+                                          setState(() {
+                                            _resetOtpSent = false;
+                                            _forgotIdentifierController.clear();
+                                            _forgotOtpController.clear();
+                                            _forgotPasswordController.clear();
+                                          });
+                                          DefaultTabController.of(
+                                            context,
+                                          ).animateTo(0);
+                                          showAppSnackBar(
+                                            context,
+                                            'Password berhasil diperbarui. Silakan login.',
+                                          );
                                         } else {
                                           showAppSnackBar(
                                             context,
-                                            'Registrasi belum berhasil. Silakan coba lagi.',
+                                            authCubit.state.errorMessage ??
+                                                'Reset password belum berhasil. Silakan coba lagi.',
                                           );
                                         }
                                       },
@@ -310,6 +593,83 @@ class _AuthPageState extends State<AuthPage> {
         ),
       ),
     );
+  }
+
+  bool _isValidNewPassword(String password) {
+    return password.length >= 8 &&
+        password.length <= 72 &&
+        RegExp(r'[A-Za-z]').hasMatch(password) &&
+        RegExp(r'[0-9]').hasMatch(password);
+  }
+
+  bool _isValidOtp(String otp) => RegExp(r'^\d{6}$').hasMatch(otp);
+
+  Future<void> _showExistingAccountDialog(
+    BuildContext pageContext,
+    String email,
+  ) async {
+    FocusScope.of(pageContext).unfocus();
+    final _ExistingAccountAction?
+    action = await showDialog<_ExistingAccountAction>(
+      context: pageContext,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Akun sudah terdaftar'),
+          content: Text(
+            'Email $email sudah memiliki akun. Anda ingin login atau mengatur ulang password?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              key: const Key('existing-account-cancel'),
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              key: const Key('existing-account-login'),
+              onPressed: () =>
+                  Navigator.of(dialogContext).pop(_ExistingAccountAction.login),
+              child: const Text('Login'),
+            ),
+            FilledButton(
+              key: const Key('existing-account-forgot-password'),
+              onPressed: () => Navigator.of(
+                dialogContext,
+              ).pop(_ExistingAccountAction.forgotPassword),
+              child: const Text('Lupa Password'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!mounted || !pageContext.mounted || action == null) {
+      return;
+    }
+
+    setState(() {
+      _registerOtpSent = false;
+      _registerOtpController.clear();
+      _registerPasswordController.clear();
+
+      switch (action) {
+        case _ExistingAccountAction.login:
+          _loginEmailController.text = email;
+          _loginPasswordController.clear();
+          _loginOtpController.clear();
+          _loginOtpSent = false;
+          break;
+        case _ExistingAccountAction.forgotPassword:
+          _forgotIdentifierController.text = email;
+          _forgotOtpController.clear();
+          _forgotPasswordController.clear();
+          _resetOtpSent = false;
+          break;
+      }
+    });
+
+    DefaultTabController.of(
+      pageContext,
+    ).animateTo(action == _ExistingAccountAction.login ? 0 : 2);
   }
 }
 
@@ -369,8 +729,8 @@ class _AuthHeroHeader extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: <Color>[
-                      AppColors.textPrimary.withValues(alpha: 0.82),
-                      AppColors.primaryRed.withValues(alpha: 0.74),
+                      AppColors.primaryTeal.withValues(alpha: 0.84),
+                      AppColors.deepTeal.withValues(alpha: 0.82),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -383,14 +743,14 @@ class _AuthHeroHeader extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const BrandLogo(size: 64, borderRadius: 18),
+                  const PartnerLogos(height: 50),
                   const SizedBox(width: AppSpacing.medium),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          AppBranding.appName,
+                          'Masuk/Daftar Akun',
                           style: Theme.of(context).textTheme.titleLarge
                               ?.copyWith(
                                 color: Colors.white,
@@ -447,47 +807,49 @@ class _AuthFormLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 2),
-        Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-        const SizedBox(height: AppSpacing.large),
-        ...children,
-        const Spacer(),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(AppSpacing.medium),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceSoft.withValues(alpha: 0.75),
-            borderRadius: BorderRadius.circular(16),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 2),
+          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: AppSpacing.large),
+          ...children,
+          const SizedBox(height: AppSpacing.large),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(AppSpacing.medium),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceSoft.withValues(alpha: 0.75),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              footerText,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppColors.textPrimary),
+            ),
           ),
-          child: Text(
-            footerText,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: AppColors.textPrimary),
+          const SizedBox(height: AppSpacing.medium),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: isLoading ? null : onSubmit,
+              child: isLoading
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Text(buttonLabel),
+            ),
           ),
-        ),
-        const SizedBox(height: AppSpacing.medium),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: isLoading ? null : onSubmit,
-            child: isLoading
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : Text(buttonLabel),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

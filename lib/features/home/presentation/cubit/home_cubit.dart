@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../shared/domain/entities/hospital_data_item.dart';
 import '../../../../shared/domain/entities/patient_feature.dart';
 import '../../domain/repositories/home_repository.dart';
 
@@ -15,7 +14,6 @@ class HomeCubit extends Cubit<HomeState> {
           isLoading: true,
           searchQuery: '',
           featureItems: <PatientFeature>[],
-          hospitalDataItems: <HospitalDataItem>[],
         ),
       );
 
@@ -25,17 +23,13 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     try {
-      final List<dynamic> results =
-          await Future.wait<dynamic>(<Future<dynamic>>[
-            _homeRepository.fetchPatientFeatures(),
-            _homeRepository.fetchHospitalDataItems(),
-          ]);
+      final List<PatientFeature> featureItems = await _homeRepository
+          .fetchPatientFeatures();
 
       emit(
         state.copyWith(
           isLoading: false,
-          featureItems: results[0] as List<PatientFeature>,
-          hospitalDataItems: results[1] as List<HospitalDataItem>,
+          featureItems: featureItems,
           errorMessage: null,
         ),
       );

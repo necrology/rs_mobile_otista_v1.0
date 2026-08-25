@@ -3,7 +3,7 @@ class ApiConfig {
 
   static const String appEnv = String.fromEnvironment(
     'APP_ENV',
-    defaultValue: 'prod',
+    defaultValue: 'dev',
   );
 
   static const String _overrideBaseUrl = String.fromEnvironment(
@@ -13,12 +13,12 @@ class ApiConfig {
 
   static const String _devBaseUrl = String.fromEnvironment(
     'DEV_API_BASE_URL',
-    defaultValue: 'http://localhost:8080/api/v1',
+    defaultValue: 'http://192.168.1.17:8081/api/v1',
   );
 
   static const String _prodBaseUrl = String.fromEnvironment(
     'PROD_API_BASE_URL',
-    defaultValue: 'https://otista.maulana-gandawijaya.my.id/api/v1',
+    defaultValue: 'https://api-mobile.rsudotista.my.id/api/v1',
   );
 
   static bool get isProd => appEnv.toLowerCase() == 'prod';

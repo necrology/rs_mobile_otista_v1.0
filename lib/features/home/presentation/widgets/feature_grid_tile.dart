@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/domain/entities/patient_feature.dart';
 
@@ -18,89 +17,75 @@ class FeatureGridTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color accentColor = _resolveCategoryColor(feature.category);
-
-    return Card(
+    return Tooltip(
+      message: feature.description,
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.small),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: accentColor.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(feature.icon, color: accentColor, size: 16),
-                  ),
-                  if (isLocked)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 3,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.brandGradient,
+                    borderRadius: BorderRadius.circular(7),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.white.withValues(alpha: 0.75),
+                        blurRadius: 3,
+                        offset: const Offset(-2, -2),
                       ),
+                      BoxShadow(
+                        color: AppColors.deepTeal.withValues(alpha: 0.32),
+                        blurRadius: 8,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Icon(feature.icon, color: Colors.white, size: 25),
+                ),
+                if (isLocked)
+                  Positioned(
+                    top: -5,
+                    right: -5,
+                    child: Container(
+                      width: 18,
+                      height: 18,
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.warning,
+                        borderRadius: BorderRadius.circular(9),
+                        border: Border.all(color: Colors.white, width: 2),
                       ),
                       child: const Icon(
-                        Icons.lock_outline_rounded,
-                        size: 12,
-                        color: AppColors.warning,
+                        Icons.lock_rounded,
+                        size: 10,
+                        color: Colors.white,
                       ),
                     ),
-                ],
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10/*  */),
+            Text(
+              feature.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: AppColors.textPrimary,
+                fontSize: 8.5,
+                fontWeight: FontWeight.w800,
+                height: 1.12,
               ),
-              const SizedBox(height: AppSpacing.small),
-              Text(
-                feature.title,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const Spacer(),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Icon(
-                  Icons.arrow_outward_rounded,
-                  size: 14,
-                  color: accentColor,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  Color _resolveCategoryColor(FeatureCategory category) {
-    switch (category) {
-      case FeatureCategory.dataRekamMedis:
-      case FeatureCategory.pembayaranTransaksi:
-      case FeatureCategory.notifikasiPersonal:
-        return AppColors.primaryRed;
-      case FeatureCategory.bookingAntrian:
-      case FeatureCategory.resepObat:
-      case FeatureCategory.kontakDarurat:
-        return AppColors.primaryGreen;
-      case FeatureCategory.konsultasiMedis:
-      case FeatureCategory.informasiRumahSakit:
-      case FeatureCategory.informasiDokter:
-      case FeatureCategory.informasiBiaya:
-      case FeatureCategory.edukasiKesehatan:
-        return AppColors.primaryBlue;
-    }
   }
 }

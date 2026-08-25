@@ -21,13 +21,15 @@ class AuthState extends Equatable {
   AuthState copyWith({
     AuthStatus? status,
     bool? isSubmitting,
-    PatientIdentity? identity,
+    Object? identity = _authNoValue,
     Object? errorMessage = _authNoValue,
   }) {
     return AuthState(
       status: status ?? this.status,
       isSubmitting: isSubmitting ?? this.isSubmitting,
-      identity: identity ?? this.identity,
+      identity: identity == _authNoValue
+          ? this.identity
+          : identity as PatientIdentity?,
       errorMessage: errorMessage == _authNoValue
           ? this.errorMessage
           : errorMessage as String?,

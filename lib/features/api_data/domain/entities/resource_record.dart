@@ -23,6 +23,25 @@ class ResourceRecord extends Equatable {
     return ApiResponseReader.stringValue(data, keys, fallback: fallback);
   }
 
+  int intValue(List<String> keys, {int fallback = 0}) {
+    for (final String key in keys) {
+      final dynamic rawValue = data[key];
+      if (rawValue is int) {
+        return rawValue;
+      }
+      if (rawValue is num) {
+        return rawValue.toInt();
+      }
+
+      final int? parsedValue = int.tryParse(rawValue?.toString().trim() ?? '');
+      if (parsedValue != null) {
+        return parsedValue;
+      }
+    }
+
+    return fallback;
+  }
+
   List<MapEntry<String, String>> displayFields({
     int limit = 8,
     List<String> priorityKeys = const <String>[],

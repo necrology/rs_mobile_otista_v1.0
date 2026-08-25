@@ -1,17 +1,28 @@
 class AppBranding {
   const AppBranding._();
 
-  static const String appName = 'RSUD Otista Mobile';
+  static const String appName = 'SIPANTES';
   static const String hospitalShortName = 'RSUD Otista';
   static const String hospitalLongName =
       'RSUD Oto Iskandar Di Nata Kabupaten Bandung';
   static const String locationShort = 'Soreang, Kabupaten Bandung';
   static const String address =
-      'Jl. Gading Tutuka, RT 01 RW 01, Kp. Cincin Kolot, Kec. Soreang, Kab. Bandung, Jawa Barat';
+      'Jl. Raya Gading Tutuka, Desa Cingcin, Kec. Soreang, Kab. Bandung, Prov. Jawa Barat';
+  static const String mapsUrl = 'https://maps.app.goo.gl/cMU1UvLw2dqoKAf48';
   static const String website = 'https://rsudotista.bandungkab.go.id/';
   static const String email = 'rsudotista@bandungkab.go.id';
+  static const String phoneDisplay = '(022) 5891355';
+  static const String phoneDial = '+62225891355';
+  static const String whatsappDisplay = '62811-965-1010';
+  static const String whatsappUrl = 'https://wa.me/628119651010';
   static const String visionMission =
-      'Mewujudkan Rumah Sakit yang Amanah, Maju, Mandiri, Berdaya Saing.';
+      'Terwujudnya Kabupaten Bandung Lebih Bangkit, Edukatif, Dinamis, Agamis dan Sejahtera (BEDAS), Maju dan Berkelanjutan Menuju Indonesia Emas.';
+  static const String missionFocus =
+      'RSUD Oto Iskandar Di Nata berfokus pada Misi 1 dan Misi 3 Pemerintah Kabupaten Bandung yang berkaitan dengan peningkatan kualitas pelayanan kesehatan masyarakat.';
+  static const String organizationCulture =
+      'MANTAP: Melayani, Akuntabel, Nyaman, Terdepan, Amanah, Profesional.';
+  static const String serviceHours =
+      'Rawat jalan dan poliklinik Senin-Sabtu pukul 08.00-14.00 WIB. IGD dan pendaftaran rawat inap buka 24 jam.';
   static const String tagline =
       'Layanan pasien digital yang ringkas, jelas, dan nyaman digunakan.';
 }

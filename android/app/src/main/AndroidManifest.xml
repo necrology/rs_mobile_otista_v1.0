@@ -2,10 +2,12 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="RSUD Otista Mobile"
+        android:label="SIPANTES"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
+        android:usesCleartextTraffic="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,6 +42,7 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <package android:name="app.bpjs.mobile"/>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

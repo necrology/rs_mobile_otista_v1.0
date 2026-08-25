@@ -16,8 +16,9 @@ Identitas rumah sakit:
 
 Konfigurasi API:
 
-- Prod default: `https://otista.maulana-gandawijaya.my.id/api/v1`
+- Prod default: `https://api-mobile.rsudotista.my.id/api/v1`
+- Health prod: `https://api-mobile.rsudotista.my.id/api/v1/health`
 - Dev lokal: `flutter run --dart-define=APP_ENV=dev --dart-define=DEV_API_BASE_URL=http://localhost:8080/api/v1`
 - Override umum: `flutter run --dart-define=API_BASE_URL=http://localhost:8080/api/v1`
-- Override prod: `flutter run --dart-define=APP_ENV=prod --dart-define=PROD_API_BASE_URL=https://otista.maulana-gandawijaya.my.id/api/v1`
+- Override prod: `flutter run --dart-define=APP_ENV=prod --dart-define=PROD_API_BASE_URL=https://api-mobile.rsudotista.my.id/api/v1`
 - Android emulator biasanya perlu memakai host mesin: `--dart-define=API_BASE_URL=http://10.0.2.2:8080/api/v1`

@@ -8,10 +8,10 @@ class AppTheme {
 
   static ThemeData get lightTheme {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primaryRed,
+      seedColor: AppColors.primaryTeal,
       brightness: Brightness.light,
-      primary: AppColors.primaryRed,
-      secondary: AppColors.primaryGreen,
+      primary: AppColors.primaryTeal,
+      secondary: AppColors.deepTeal,
       tertiary: AppColors.primaryGold,
       surface: AppColors.cardBackground,
       onSurface: AppColors.textPrimary,
@@ -63,7 +63,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.scaffoldBackground,
       appBarTheme: const AppBarTheme(
         centerTitle: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.scaffoldBackground,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
       ),
@@ -71,14 +71,15 @@ class AppTheme {
         color: AppColors.cardBackground,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
           side: const BorderSide(color: AppColors.borderSoft),
         ),
-        elevation: 0,
+        elevation: 2,
+        shadowColor: Color(0x1A1A4540),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: Colors.white,
-        indicatorColor: AppColors.primaryRed.withValues(alpha: 0.10),
+        indicatorColor: AppColors.primaryTeal.withValues(alpha: 0.14),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (Set<WidgetState> states) => GoogleFonts.plusJakartaSans(
             fontSize: 12,
@@ -86,7 +87,7 @@ class AppTheme {
                 ? FontWeight.w700
                 : FontWeight.w600,
             color: states.contains(WidgetState.selected)
-                ? AppColors.primaryRed
+                ? AppColors.primaryTeal
                 : AppColors.textSecondary,
           ),
         ),
@@ -118,7 +119,10 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primaryRed, width: 1.2),
+          borderSide: const BorderSide(
+            color: AppColors.primaryTeal,
+            width: 1.2,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -147,7 +151,7 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primaryRed,
+          backgroundColor: AppColors.primaryTeal,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -162,7 +166,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.textPrimary,
-          side: const BorderSide(color: AppColors.borderSoft),
+          side: const BorderSide(color: AppColors.deepTeal, width: 1.2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

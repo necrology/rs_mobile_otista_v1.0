@@ -90,13 +90,10 @@ class FeatureTileCard extends StatelessWidget {
     switch (category) {
       case FeatureCategory.dataRekamMedis:
       case FeatureCategory.pembayaranTransaksi:
-      case FeatureCategory.notifikasiPersonal:
         return AppColors.primaryRed;
       case FeatureCategory.bookingAntrian:
       case FeatureCategory.resepObat:
-      case FeatureCategory.kontakDarurat:
         return AppColors.primaryGreen;
-      case FeatureCategory.konsultasiMedis:
       case FeatureCategory.informasiRumahSakit:
       case FeatureCategory.informasiDokter:
       case FeatureCategory.informasiBiaya:

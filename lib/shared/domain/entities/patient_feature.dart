@@ -6,13 +6,10 @@ enum FeatureCategory {
   bookingAntrian,
   pembayaranTransaksi,
   resepObat,
-  konsultasiMedis,
-  notifikasiPersonal,
   informasiRumahSakit,
   informasiDokter,
   informasiBiaya,
   edukasiKesehatan,
-  kontakDarurat,
 }
 
 extension FeatureCategoryExtension on FeatureCategory {
@@ -21,15 +18,11 @@ extension FeatureCategoryExtension on FeatureCategory {
       case FeatureCategory.dataRekamMedis:
         return 'Data & Rekam Medis';
       case FeatureCategory.bookingAntrian:
-        return 'Booking & Antrian';
+        return 'Pendaftaran & Antrian';
       case FeatureCategory.pembayaranTransaksi:
-        return 'Pembayaran & Transaksi';
+        return 'Tagihan & Pembayaran';
       case FeatureCategory.resepObat:
         return 'Resep & Obat';
-      case FeatureCategory.konsultasiMedis:
-        return 'Konsultasi Medis';
-      case FeatureCategory.notifikasiPersonal:
-        return 'Notifikasi Personal';
       case FeatureCategory.informasiRumahSakit:
         return 'Informasi Rumah Sakit';
       case FeatureCategory.informasiDokter:
@@ -38,8 +31,6 @@ extension FeatureCategoryExtension on FeatureCategory {
         return 'Informasi Biaya';
       case FeatureCategory.edukasiKesehatan:
         return 'Edukasi Kesehatan';
-      case FeatureCategory.kontakDarurat:
-        return 'Kontak Darurat';
     }
   }
 
@@ -49,14 +40,11 @@ extension FeatureCategoryExtension on FeatureCategory {
       case FeatureCategory.bookingAntrian:
       case FeatureCategory.pembayaranTransaksi:
       case FeatureCategory.resepObat:
-      case FeatureCategory.konsultasiMedis:
-      case FeatureCategory.notifikasiPersonal:
         return true;
       case FeatureCategory.informasiRumahSakit:
       case FeatureCategory.informasiDokter:
       case FeatureCategory.informasiBiaya:
       case FeatureCategory.edukasiKesehatan:
-      case FeatureCategory.kontakDarurat:
         return false;
     }
   }
@@ -70,6 +58,7 @@ class PatientFeature extends Equatable {
     required this.category,
     required this.icon,
     required this.dummyDetails,
+    this.links = const <PatientFeatureLink>[],
   });
 
   final String id;
@@ -78,6 +67,7 @@ class PatientFeature extends Equatable {
   final FeatureCategory category;
   final IconData icon;
   final List<String> dummyDetails;
+  final List<PatientFeatureLink> links;
 
   bool get requiresLogin => category.requiresLogin;
 
@@ -87,8 +77,11 @@ class PatientFeature extends Equatable {
       return true;
     }
 
+    final String linkText = links
+        .map((PatientFeatureLink link) => '${link.label} ${link.value}')
+        .join(' ');
     final String aggregateText =
-        '$title $description ${category.title} ${dummyDetails.join(' ')}'
+        '$title $description ${category.title} ${dummyDetails.join(' ')} $linkText'
             .toLowerCase();
     return aggregateText.contains(normalizedQuery);
   }
@@ -101,5 +94,23 @@ class PatientFeature extends Equatable {
     category,
     icon,
     dummyDetails,
+    links,
   ];
+}
+
+enum PatientFeatureLinkType { maps, email, phone, website }
+
+class PatientFeatureLink extends Equatable {
+  const PatientFeatureLink({
+    required this.label,
+    required this.value,
+    required this.type,
+  });
+
+  final String label;
+  final String value;
+  final PatientFeatureLinkType type;
+
+  @override
+  List<Object?> get props => <Object?>[label, value, type];
 }

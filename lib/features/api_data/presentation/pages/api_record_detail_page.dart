@@ -14,6 +14,7 @@ class ApiRecordDetailPage extends StatelessWidget {
     required this.fields,
     this.subtitle,
     this.badges = const <Widget>[],
+    this.extraSections = const <Widget>[],
   });
 
   final String appBarTitle;
@@ -23,6 +24,7 @@ class ApiRecordDetailPage extends StatelessWidget {
   final Color accentColor;
   final List<MapEntry<String, String>> fields;
   final List<Widget> badges;
+  final List<Widget> extraSections;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,10 @@ class ApiRecordDetailPage extends StatelessWidget {
                 ),
               ),
             ),
+            if (extraSections.isNotEmpty) ...<Widget>[
+              const SizedBox(height: AppSpacing.medium),
+              ...extraSections,
+            ],
           ],
         ),
       ),

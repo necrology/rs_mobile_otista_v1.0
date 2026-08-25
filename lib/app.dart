@@ -8,7 +8,8 @@ import 'features/api_data/data/datasources/rs_api_remote_datasource.dart';
 import 'features/api_data/data/repositories/rs_api_repository_impl.dart';
 import 'features/api_data/domain/repositories/rs_api_repository.dart';
 import 'features/api_data/presentation/cubit/rs_api_cubit.dart';
-import 'features/auth/data/datasources/auth_local_datasource.dart';
+import 'features/auth/data/datasources/auth_remote_datasource.dart';
+import 'features/auth/data/datasources/auth_secure_storage.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
@@ -26,13 +27,21 @@ class RsMobileApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <RepositoryProvider<dynamic>>[
+        RepositoryProvider<AuthSecureStorage>(
+          create: (_) => AuthSecureStorage(),
+        ),
         RepositoryProvider<ApiClient>(
-          create: (_) => ApiClient(),
+          create: (BuildContext context) =>
+              ApiClient(sessionStore: context.read<AuthSecureStorage>()),
           dispose: (ApiClient apiClient) => apiClient.close(),
         ),
         RepositoryProvider<AuthRepository>(
-          create: (_) =>
-              AuthRepositoryImpl(localDatasource: AuthLocalDatasource()),
+          create: (BuildContext context) => AuthRepositoryImpl(
+            remoteDatasource: AuthRemoteDatasource(
+              apiClient: context.read<ApiClient>(),
+            ),
+            secureStorage: context.read<AuthSecureStorage>(),
+          ),
         ),
         RepositoryProvider<HomeRepository>(
           create: (_) =>

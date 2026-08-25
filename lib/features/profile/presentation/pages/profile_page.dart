@@ -5,10 +5,10 @@ import '../../../../core/constants/app_branding.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_background.dart';
-import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/brand_logo.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../../../auth/presentation/pages/auth_page.dart';
+import 'medical_record_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -71,6 +71,14 @@ class ProfilePage extends StatelessWidget {
                                   Text(identity.email),
                                   const SizedBox(height: 2),
                                   Text(identity.phoneNumber),
+                                  if (identity
+                                      .medicalRecordNumber
+                                      .isNotEmpty) ...<Widget>[
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'No. RM ${identity.medicalRecordNumber}',
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -87,47 +95,15 @@ class ProfilePage extends StatelessWidget {
                               color: AppColors.primaryGreen,
                             ),
                             _InfoChip(
-                              icon: Icons.family_restroom_outlined,
-                              label:
-                                  '${identity.familyMembers.length} keluarga terhubung',
-                              color: AppColors.primaryBlue,
-                            ),
-                            _InfoChip(
-                              icon: Icons.local_hospital_outlined,
-                              label: AppBranding.hospitalShortName,
-                              color: AppColors.primaryRed,
+                              icon: Icons.assignment_ind_outlined,
+                              label: identity.medicalRecordNumber.isEmpty
+                                  ? 'No. RM belum terhubung'
+                                  : 'No. RM terhubung',
+                              color: AppColors.primaryGold,
                             ),
                           ],
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.medium),
-                Text(
-                  'Keluarga Terdaftar',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: AppSpacing.small),
-                ...identity.familyMembers.map(
-                  (String memberName) => Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpacing.small),
-                    child: Card(
-                      child: ListTile(
-                        leading: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryBlue.withValues(
-                              alpha: 0.10,
-                            ),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: const Icon(Icons.people_alt_outlined),
-                        ),
-                        title: Text(memberName),
-                        subtitle: const Text('Terhubung ke profil pasien'),
-                      ),
                     ),
                   ),
                 ),
@@ -141,50 +117,19 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       _ProfileMenuTile(
-                        icon: Icons.settings_outlined,
-                        title: 'Pengaturan Akun',
-                        onTap: () => showAppSnackBar(
-                          context,
-                          'Halaman pengaturan masih berupa contoh tampilan.',
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      _ProfileMenuTile(
-                        icon: Icons.badge_outlined,
-                        title: 'Identitas Rumah Sakit',
-                        onTap: () =>
-                            showAppSnackBar(context, AppBranding.website),
-                      ),
-                      const Divider(height: 1),
-                      _ProfileMenuTile(
-                        icon: Icons.help_outline_rounded,
-                        title: 'Bantuan & Informasi',
-                        onTap: () => showAppSnackBar(
-                          context,
-                          'Kanal resmi: ${AppBranding.email}',
-                        ),
+                        icon: Icons.assignment_ind_outlined,
+                        title: identity.medicalRecordNumber.isEmpty
+                            ? 'Hubungkan No. RM'
+                            : 'Ubah No. RM',
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const MedicalRecordPage(),
+                            ),
+                          );
+                        },
                       ),
                     ],
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.medium),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.medium),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Visi Misi',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: AppSpacing.xSmall),
-                        Text(
-                          AppBranding.visionMission,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.medium),
@@ -193,7 +138,7 @@ class ProfilePage extends StatelessWidget {
                   child: OutlinedButton.icon(
                     onPressed: authState.isSubmitting
                         ? null
-                        : () => context.read<AuthCubit>().signOut(),
+                        : () => _confirmSignOut(context),
                     icon: const Icon(Icons.logout_rounded),
                     label: const Text('Logout'),
                   ),
@@ -204,6 +149,38 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final bool shouldSignOut =
+        await showDialog<bool>(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: const Text('Logout akun?'),
+              content: const Text(
+                'Anda perlu login kembali untuk mengakses layanan personal.',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(false),
+                  child: const Text('Batal'),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(true),
+                  child: const Text('Logout'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+
+    if (!shouldSignOut || !context.mounted) {
+      return;
+    }
+
+    await context.read<AuthCubit>().signOut();
   }
 }
 
@@ -226,21 +203,39 @@ class _GuestProfileView extends StatelessWidget {
         110,
       ),
       children: <Widget>[
-        Card(
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: <Color>[
+                Colors.white,
+                AppColors.primaryTeal.withValues(alpha: 0.34),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: AppColors.deepTeal.withValues(alpha: 0.10),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.large),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const BrandLogo(size: 68, borderRadius: 20),
+                const PartnerLogos(height: 50),
                 const SizedBox(height: AppSpacing.medium),
                 Text(
-                  'Guest Mode Aktif',
+                  'Mode Tamu Aktif',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: AppSpacing.xSmall),
                 Text(
-                  'Login untuk membuka rekam medis, booking, pembayaran, resep, dan konsultasi dokter dengan tampilan yang lebih personal.',
+                  'Login untuk membuka rekam medis, pendaftaran, antrian, tagihan, dan resep dengan tampilan yang lebih personal.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: AppSpacing.large),
@@ -271,17 +266,17 @@ class _GuestProfileView extends StatelessWidget {
         const SizedBox(height: AppSpacing.small),
         const _GuestMenuCard(
           icon: Icons.local_hospital_outlined,
-          title: 'Informasi Rumah Sakit & Dokter',
+          title: 'Dokter & Poli',
         ),
         const SizedBox(height: AppSpacing.small),
         const _GuestMenuCard(
           icon: Icons.payments_outlined,
-          title: 'Tarif & Estimasi Biaya',
+          title: 'Tarif Layanan',
         ),
         const SizedBox(height: AppSpacing.small),
         const _GuestMenuCard(
-          icon: Icons.contact_phone_outlined,
-          title: 'Kontak Resmi',
+          icon: Icons.bed_outlined,
+          title: 'Ketersediaan Kamar',
         ),
         const SizedBox(height: AppSpacing.medium),
         Card(

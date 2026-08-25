@@ -34,24 +34,62 @@ class EmployeeRecord extends Equatable {
   String get unit => ApiResponseReader.stringValue(data, const <String>[
     'unit',
     'poli',
+    'poli_type',
     'spesialis',
     'spesialisasi',
     'departemen',
+    'subkelompok_pegawai',
+    'smf',
   ]);
 
+  String get poliId => ApiResponseReader.stringValue(data, const <String>[
+    'poli_id',
+    'poliklinik_id',
+    'ruangan_id',
+  ], fallback: '');
+
+  String get poliType => ApiResponseReader.stringValue(data, const <String>[
+    'poli_type',
+    'politype',
+  ], fallback: '');
+
+  String get kuotaPoli => ApiResponseReader.stringValue(data, const <String>[
+    'kuota_poli',
+    'kuota',
+  ], fallback: '');
+
+  bool get isDoctorLike {
+    final String flag = ApiResponseReader.stringValue(data, const <String>[
+      'is_dokter',
+    ], fallback: '').toLowerCase();
+    if (<String>{'1', 'true', 'y', 'yes', 'dokter'}.contains(flag)) {
+      return true;
+    }
+
+    final String text = '$nama $jabatan $unit'.toLowerCase();
+    return text.contains('dokter') ||
+        text.contains('dr.') ||
+        text.contains('dr ');
+  }
+
   List<MapEntry<String, String>> get displayFields {
-    return ApiResponseReader.readableEntries(
-      data,
-      limit: 40,
-      excludeSystemFields: true,
-      priorityKeys: const <String>[
-        'nama',
-        'jabatan',
-        'unit',
-        'poli',
-        'spesialisasi',
-      ],
-    );
+    final List<MapEntry<String, String>> fields = <MapEntry<String, String>>[];
+
+    void add(String label, String value) {
+      final String normalizedValue = value.trim();
+      if (normalizedValue.isEmpty || normalizedValue == '-') {
+        return;
+      }
+      fields.add(MapEntry<String, String>(label, normalizedValue));
+    }
+
+    add('Nama', nama);
+    add('Jabatan', jabatan);
+    add('Unit/Poli', unit);
+    add('Poli ID', poliId);
+    add('Kuota Poli', kuotaPoli);
+
+    return fields;
   }
 
   @override

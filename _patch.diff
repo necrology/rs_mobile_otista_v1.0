@@ -1,0 +1,16 @@
+﻿*** Begin Patch
+*** Update File: lib/features/profile/presentation/pages/medical_record_page.dart
+@@
+                           child: FilledButton.icon(
+                             onPressed: state.isSubmitting ? null : _submit,
+                             icon: state.isSubmitting
+-                                ? const SizedBox(
+-                                    width: 18,
+-                                    height: 18,
+-                                    child: AppLoadingIndicator(size: 18),
+-                                  )
++                                ? const AppLoadingIndicator(size: 18)
+                                 : Icon(
+                                     _otpSent
+                                         ? Icons.verified_user_outlined
+*** End Patch

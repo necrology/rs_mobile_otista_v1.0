@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+
+import '../../../../core/utils/date_format_utils.dart';
 
 class ApiCollection<T> extends Equatable {
   const ApiCollection({required this.items, this.total, this.raw});
@@ -141,7 +145,7 @@ class ApiResponseReader {
         continue;
       }
 
-      final String normalizedValue = value.toString().trim();
+      final String normalizedValue = _normalizeDisplayValue(value.toString());
       if (normalizedValue.isNotEmpty && normalizedValue != 'null') {
         return normalizedValue;
       }
@@ -225,6 +229,8 @@ class ApiResponseReader {
     'refresh_token',
     'remember_token',
     'hidden',
+    'status_lama',
+    'statuslama',
   };
 
   static int? _parseInt(dynamic value) {
@@ -245,20 +251,64 @@ class ApiResponseReader {
     }
 
     if (value is List<dynamic>) {
-      return value.where((dynamic item) => item != null).join(', ');
+      return _normalizeDisplayValue(
+        value.where((dynamic item) => item != null).join(', '),
+      );
     }
 
     if (value is Map<dynamic, dynamic>) {
-      return value.entries
-          .take(3)
-          .map(
-            (MapEntry<dynamic, dynamic> entry) =>
-                '${entry.key}: ${entry.value}',
-          )
-          .join(', ');
+      return _normalizeDisplayValue(
+        value.entries
+            .take(3)
+            .map(
+              (MapEntry<dynamic, dynamic> entry) =>
+                  '${entry.key}: ${entry.value}',
+            )
+            .join(', '),
+      );
     }
 
-    return value.toString().trim();
+    return _normalizeDisplayValue(value.toString());
+  }
+
+  static String _normalizeDisplayValue(String value) {
+    final String trimmed = value.trim();
+    if (trimmed.isEmpty || trimmed == 'null') {
+      return '';
+    }
+
+    if (_isJsonPayload(trimmed)) {
+      return '';
+    }
+
+    if (DateFormatUtils.isDateLike(trimmed)) {
+      return DateFormatUtils.formatDisplayDate(trimmed);
+    }
+
+    return trimmed.replaceAllMapped(
+      RegExp(r'(?<!\d)(\d{2}):(\d{2}):(\d{2})(?!\d)'),
+      (Match match) => '${match[1]}:${match[2]}',
+    );
+  }
+
+  static bool _isJsonPayload(String value) {
+    if (value.length < 2) {
+      return false;
+    }
+
+    final bool hasJsonShape =
+        (value.startsWith('{') && value.endsWith('}')) ||
+        (value.startsWith('[') && value.endsWith(']'));
+    if (!hasJsonShape) {
+      return false;
+    }
+
+    try {
+      jsonDecode(value);
+      return true;
+    } on FormatException {
+      return false;
+    }
   }
 
   static String _labelize(String key) {

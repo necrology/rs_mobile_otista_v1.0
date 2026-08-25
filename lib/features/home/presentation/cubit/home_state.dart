@@ -5,14 +5,12 @@ class HomeState extends Equatable {
     required this.isLoading,
     required this.searchQuery,
     required this.featureItems,
-    required this.hospitalDataItems,
     this.errorMessage,
   });
 
   final bool isLoading;
   final String searchQuery;
   final List<PatientFeature> featureItems;
-  final List<HospitalDataItem> hospitalDataItems;
   final String? errorMessage;
 
   List<PatientFeature> get filteredFeatureItems {
@@ -22,16 +20,6 @@ class HomeState extends Equatable {
 
     return featureItems
         .where((PatientFeature feature) => feature.matches(searchQuery))
-        .toList();
-  }
-
-  List<HospitalDataItem> get filteredHospitalDataItems {
-    if (searchQuery.trim().isEmpty) {
-      return hospitalDataItems;
-    }
-
-    return hospitalDataItems
-        .where((HospitalDataItem dataItem) => dataItem.matches(searchQuery))
         .toList();
   }
 
@@ -51,14 +39,12 @@ class HomeState extends Equatable {
     bool? isLoading,
     String? searchQuery,
     List<PatientFeature>? featureItems,
-    List<HospitalDataItem>? hospitalDataItems,
     Object? errorMessage = _homeNoValue,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
       searchQuery: searchQuery ?? this.searchQuery,
       featureItems: featureItems ?? this.featureItems,
-      hospitalDataItems: hospitalDataItems ?? this.hospitalDataItems,
       errorMessage: errorMessage == _homeNoValue
           ? this.errorMessage
           : errorMessage as String?,
@@ -70,7 +56,6 @@ class HomeState extends Equatable {
     isLoading,
     searchQuery,
     featureItems,
-    hospitalDataItems,
     errorMessage,
   ];
 }
