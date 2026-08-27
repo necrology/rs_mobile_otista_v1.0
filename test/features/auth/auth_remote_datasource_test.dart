@@ -84,6 +84,20 @@ void main() {
             });
           }
 
+          if (request.url.path.endsWith('/auth/account-deletion/request')) {
+            expect(body, <String, Object?>{'password': 'Password123'});
+            return _jsonResponse(request, 202, <String, Object?>{
+              'message': 'otp penghapusan terkirim',
+            });
+          }
+
+          if (request.url.path.endsWith('/auth/account-deletion/confirm')) {
+            expect(body, <String, Object?>{'otp': '112233'});
+            return _jsonResponse(request, 200, <String, Object?>{
+              'message': 'akun berhasil dihapus',
+            });
+          }
+
           fail('Unexpected request: ${request.url}');
         }),
       );
@@ -114,13 +128,15 @@ void main() {
       final linkedIdentity = await datasource.confirmMedicalRecordClaim(
         otp: '654321',
       );
+      await datasource.requestAccountDeletion(password: 'Password123');
+      await datasource.confirmAccountDeletion(otp: '112233');
 
       expect(registrationResult, RegistrationRequestResult.otpSent);
       expect(ticket, 'registration-ticket');
       expect(session.tokenPair.accessToken, 'access-token-new');
       expect(session.identity.patientId, '0');
       expect(linkedIdentity.patientId, '99');
-      expect(calledPaths, hasLength(5));
+      expect(calledPaths, hasLength(7));
       client.close();
     },
   );

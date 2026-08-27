@@ -759,17 +759,18 @@ class _AuthHeroHeader extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          AppBranding.hospitalLongName,
+                          AppBranding.appName,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
+                                fontWeight: FontWeight.w800,
                                 color: Colors.white.withValues(alpha: 0.92),
                               ),
                         ),
                         const SizedBox(height: AppSpacing.small),
                         Text(
-                          AppBranding.tagline,
+                          AppBranding.appSubtitle,
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(color: Colors.white70),
                         ),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_branding.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_background.dart';
+import '../../../../core/widgets/app_snackbar.dart';
 import '../../../../core/widgets/brand_logo.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../../../auth/presentation/pages/auth_page.dart';
+import 'account_deletion_page.dart';
 import 'medical_record_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -34,6 +37,16 @@ class ProfilePage extends StatelessWidget {
                     ),
                   );
                 },
+                onPrivacyTap: () => _openExternalUrl(
+                  context,
+                  AppBranding.privacyPolicyUrl,
+                  'Kebijakan privasi tidak dapat dibuka.',
+                ),
+                onAccountDeletionTap: () => _openExternalUrl(
+                  context,
+                  AppBranding.accountDeletionUrl,
+                  'Halaman penghapusan akun tidak dapat dibuka.',
+                ),
               );
             }
 
@@ -129,6 +142,23 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
+                      const Divider(height: 1),
+                      _ProfileMenuTile(
+                        icon: Icons.privacy_tip_outlined,
+                        title: 'Kebijakan Privasi',
+                        onTap: () => _openExternalUrl(
+                          context,
+                          AppBranding.privacyPolicyUrl,
+                          'Kebijakan privasi tidak dapat dibuka.',
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      _ProfileMenuTile(
+                        icon: Icons.delete_forever_outlined,
+                        title: 'Hapus Akun',
+                        color: AppColors.danger,
+                        onTap: () => _openAccountDeletion(context),
+                      ),
                     ],
                   ),
                 ),
@@ -182,16 +212,47 @@ class ProfilePage extends StatelessWidget {
 
     await context.read<AuthCubit>().signOut();
   }
+
+  Future<void> _openAccountDeletion(BuildContext context) async {
+    final bool? deleted = await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(builder: (_) => const AccountDeletionPage()),
+    );
+    if (deleted == true && context.mounted) {
+      showAppSnackBar(
+        context,
+        'Akun SIPANTES berhasil dihapus.',
+        backgroundColor: AppColors.success,
+      );
+    }
+  }
+
+  Future<void> _openExternalUrl(
+    BuildContext context,
+    String value,
+    String errorMessage,
+  ) async {
+    final bool opened = await launchUrl(
+      Uri.parse(value),
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened && context.mounted) {
+      showAppSnackBar(context, errorMessage);
+    }
+  }
 }
 
 class _GuestProfileView extends StatelessWidget {
   const _GuestProfileView({
     required this.onLoginTap,
     required this.onRegisterTap,
+    required this.onPrivacyTap,
+    required this.onAccountDeletionTap,
   });
 
   final VoidCallback onLoginTap;
   final VoidCallback onRegisterTap;
+  final VoidCallback onPrivacyTap;
+  final VoidCallback onAccountDeletionTap;
 
   @override
   Widget build(BuildContext context) {
@@ -278,6 +339,18 @@ class _GuestProfileView extends StatelessWidget {
           icon: Icons.bed_outlined,
           title: 'Ketersediaan Kamar',
         ),
+        const SizedBox(height: AppSpacing.small),
+        _GuestMenuCard(
+          icon: Icons.privacy_tip_outlined,
+          title: 'Kebijakan Privasi',
+          onTap: onPrivacyTap,
+        ),
+        const SizedBox(height: AppSpacing.small),
+        _GuestMenuCard(
+          icon: Icons.delete_outline_rounded,
+          title: 'Penghapusan Akun',
+          onTap: onAccountDeletionTap,
+        ),
         const SizedBox(height: AppSpacing.medium),
         Card(
           child: Padding(
@@ -312,10 +385,11 @@ class _GuestProfileView extends StatelessWidget {
 }
 
 class _GuestMenuCard extends StatelessWidget {
-  const _GuestMenuCard({required this.icon, required this.title});
+  const _GuestMenuCard({required this.icon, required this.title, this.onTap});
 
   final IconData icon;
   final String title;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -331,6 +405,10 @@ class _GuestMenuCard extends StatelessWidget {
           child: Icon(icon),
         ),
         title: Text(title),
+        trailing: onTap == null
+            ? null
+            : const Icon(Icons.open_in_new_rounded, size: 20),
+        onTap: onTap,
       ),
     );
   }
@@ -378,11 +456,13 @@ class _ProfileMenuTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.color,
   });
 
   final IconData icon;
   final String title;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -398,10 +478,10 @@ class _ProfileMenuTile extends StatelessWidget {
           color: AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(14),
         ),
-        child: Icon(icon),
+        child: Icon(icon, color: color),
       ),
-      title: Text(title),
-      trailing: const Icon(Icons.chevron_right_rounded),
+      title: Text(title, style: color == null ? null : TextStyle(color: color)),
+      trailing: Icon(Icons.chevron_right_rounded, color: color),
       onTap: onTap,
     );
   }

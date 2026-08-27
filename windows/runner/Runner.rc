@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "RSUD Otista Mobile" "\0"
-            VALUE "FileDescription", "RSUD Otista Mobile" "\0"
+            VALUE "CompanyName", "RSUD Oto Iskandar Di Nata" "\0"
+            VALUE "FileDescription", "SIPANTES - Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "rs_mobile_otista_v1_0" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 RSUD Otista Mobile. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 RSUD Oto Iskandar Di Nata. All rights reserved." "\0"
             VALUE "OriginalFilename", "rs_mobile_otista_v1_0.exe" "\0"
-            VALUE "ProductName", "RSUD Otista Mobile" "\0"
+            VALUE "ProductName", "SIPANTES" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

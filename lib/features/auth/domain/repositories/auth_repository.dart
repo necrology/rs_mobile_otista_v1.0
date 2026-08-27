@@ -37,6 +37,10 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<void> requestAccountDeletion({required String password});
+
+  Future<void> confirmAccountDeletion({required String otp});
+
   Future<void> requestMedicalRecordClaim({
     required String password,
     required String noRm,

@@ -242,6 +242,64 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<bool> requestAccountDeletion({required String password}) async {
+    if (!state.isAuthenticated) {
+      emit(
+        state.copyWith(errorMessage: 'Login diperlukan untuk menghapus akun.'),
+      );
+      return false;
+    }
+
+    emit(state.copyWith(isSubmitting: true, errorMessage: null));
+    try {
+      await _authRepository.requestAccountDeletion(password: password);
+      emit(state.copyWith(isSubmitting: false, errorMessage: null));
+      return true;
+    } catch (error) {
+      emit(
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: _friendlyError(
+            error,
+            'Permintaan penghapusan akun gagal.',
+          ),
+        ),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> confirmAccountDeletion({required String otp}) async {
+    if (!state.isAuthenticated) {
+      emit(
+        state.copyWith(errorMessage: 'Login diperlukan untuk menghapus akun.'),
+      );
+      return false;
+    }
+
+    emit(state.copyWith(isSubmitting: true, errorMessage: null));
+    try {
+      await _authRepository.confirmAccountDeletion(otp: otp);
+      emit(
+        state.copyWith(
+          status: AuthStatus.guest,
+          identity: null,
+          isSubmitting: false,
+          errorMessage: null,
+        ),
+      );
+      return true;
+    } catch (error) {
+      emit(
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: _friendlyError(error, 'Penghapusan akun gagal.'),
+        ),
+      );
+      return false;
+    }
+  }
+
   Future<bool> requestMedicalRecordClaim({
     required String password,
     required String noRm,

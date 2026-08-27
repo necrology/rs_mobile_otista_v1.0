@@ -62,7 +62,8 @@ $moduleHtml = @'
 <html><head><meta charset="utf-8" /><title>MOD-RSOM-API-001 v1.1</title><style>{{CSS}}</style></head><body>
 <div class="cover">
   <h1>MODUL INTEGRASI API DAN PENGUJIAN</h1>
-  <h2>RSUD Otista Mobile</h2>
+  <h2>SIPANTES</h2>
+  <p class="subtitle">Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata</p>
   <p class="subtitle">Bearer session, kontrak API, aplikasi Flutter, bukti emulator, dan hasil probe produksi</p>
   <p><b>MOD-RSOM-API-001 &#183; Versi 1.1 &#183; 16 Juli 2026 (WIB)</b></p>
   <div class="status">HOLD UNTUK DISTRIBUSI RESMI</div>
@@ -77,7 +78,7 @@ $moduleHtml = @'
 <tr><td>Base URL produksi</td><td>https://api-mobile.rsudotista.my.id/api/v1</td></tr>
 <tr><td>Health</td><td>https://api-mobile.rsudotista.my.id/api/v1/health</td></tr>
 <tr><td>Emulator</td><td>EMULATOR MAUL / emulator-5554</td></tr>
-<tr><td>Aplikasi</td><td>id.go.bandungkab.rsudotista.mobile &#183; 1.0.0 (versionCode 1)</td></tr>
+<tr><td>Aplikasi</td><td>id.rsudotista.sipantes &#183; 1.0.0 (versionCode 1)</td></tr>
 </table>
 
 <h1>1. Ringkasan Eksekutif</h1>
@@ -309,7 +310,8 @@ $spoHtml = @'
 <div class="cover">
 <h1>STANDAR PROSEDUR OPERASIONAL</h1>
 <h2>Deployment, Pengujian Auth Bearer, dan Rollback</h2>
-<p class="subtitle">RSUD Otista Mobile</p>
+<p class="subtitle">SIPANTES</p>
+<p class="subtitle">Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata</p>
 <p><b>SPO-RSOM-API-001 &#183; Versi 1.1 &#183; 16 Juli 2026 (WIB)</b></p>
 <div class="status">DRAFT TERKENDALI &#8212; GO-LIVE MEMERLUKAN PERSETUJUAN</div>
 <p class="small">Dilarang mencantumkan password, OTP, token, NIK, No. RM, atau data klinis nyata pada bukti.</p>
@@ -426,7 +428,7 @@ flutter build apk --release --dart-define=APP_ENV=prod
 Get-FileHash build\app\outputs\flutter-apk\app-release.apk -Algorithm SHA256</pre>
 <ul><li>Base URL adalah https://api-mobile.rsudotista.my.id/api/v1, bukan URL /health.</li>
 <li>Manifest release: allowBackup=false dan usesCleartextTraffic=false.</li>
-<li>Debug/profile cleartext hanya untuk http://10.0.2.2 saat development.</li>
+<li>Mode debug/profile memakai endpoint HTTPS produksi yang sama; cleartext tidak diperlukan.</li>
 <li>Distribusi resmi wajib production keystore dari secret/CI.</li>
 <li>Catat version, checksum APK, dan certificate fingerprint sesudah signing.</li></ul>
 
@@ -806,7 +808,7 @@ function New-DocxFromHtml {
     }
 }
 
-New-DocxFromHtml -Html $moduleHtml -OutputPath $modulePath -Title 'Modul Integrasi API dan Pengujian RSUD Otista Mobile v1.1'
-New-DocxFromHtml -Html $spoHtml -OutputPath $spoPath -Title 'SPO Deployment, Pengujian Auth Bearer, dan Rollback RSUD Otista Mobile v1.1'
+New-DocxFromHtml -Html $moduleHtml -OutputPath $modulePath -Title 'SIPANTES - Modul Integrasi API dan Pengujian v1.1'
+New-DocxFromHtml -Html $spoHtml -OutputPath $spoPath -Title 'SIPANTES - SPO Deployment, Pengujian Auth Bearer, dan Rollback v1.1'
 
 Get-Item -LiteralPath $modulePath, $spoPath | Select-Object FullName, Length, LastWriteTime

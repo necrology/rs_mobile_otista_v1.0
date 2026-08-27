@@ -1,11 +1,12 @@
-# RSUD Otista Mobile
+# SIPANTES
 
-Project Flutter untuk aplikasi `RSUD Otista Mobile`.
+Project Flutter untuk aplikasi SIPANTES.
 
 Branding utama:
 
-- Nama aplikasi: `RSUD Otista Mobile`
-- Nama lengkap: `RSUD Oto Iskandar Di Nata Kabupaten Bandung`
+- Title: SIPANTES
+- Subtitle: Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata
+- Nama rumah sakit: RSUD Oto Iskandar Di Nata Kabupaten Bandung
 - Version: `1.0.0`
 
 Identitas rumah sakit:
@@ -16,9 +17,16 @@ Identitas rumah sakit:
 
 Konfigurasi API:
 
-- Prod default: `https://api-mobile.rsudotista.my.id/api/v1`
+- Default dev, prod, dan Android emulator: `https://api-mobile.rsudotista.my.id/api/v1`
 - Health prod: `https://api-mobile.rsudotista.my.id/api/v1/health`
-- Dev lokal: `flutter run --dart-define=APP_ENV=dev --dart-define=DEV_API_BASE_URL=http://localhost:8080/api/v1`
-- Override umum: `flutter run --dart-define=API_BASE_URL=http://localhost:8080/api/v1`
+- Override dev lokal (opsional): `flutter run --dart-define=APP_ENV=dev --dart-define=DEV_API_BASE_URL=http://localhost:8080/api/v1`
+- Override umum (opsional): `flutter run --dart-define=API_BASE_URL=http://localhost:8080/api/v1`
 - Override prod: `flutter run --dart-define=APP_ENV=prod --dart-define=PROD_API_BASE_URL=https://api-mobile.rsudotista.my.id/api/v1`
-- Android emulator biasanya perlu memakai host mesin: `--dart-define=API_BASE_URL=http://10.0.2.2:8080/api/v1`
+- Android emulator otomatis memakai endpoint default yang sama; override hanya diperlukan untuk server lokal.
+
+Kebijakan dan penghapusan akun:
+
+- Kebijakan privasi: `https://sipantes.maulana-gandawijaya.my.id/privacy-policy`
+- Penghapusan akun web: `https://sipantes.maulana-gandawijaya.my.id/account-deletion`
+- Penghapusan dari aplikasi tersedia pada `Profil & Akun > Hapus Akun` setelah login.
+- Penghapusan akun melepaskan identitas akun mobile dan sesi login, tetapi tidak menghapus rekam medis serta dokumen pelayanan rumah sakit.

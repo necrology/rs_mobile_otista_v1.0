@@ -1,6 +1,9 @@
 class ApiConfig {
   const ApiConfig._();
 
+  static const String _defaultBaseUrl =
+      'https://api-mobile.rsudotista.my.id/api/v1';
+
   static const String appEnv = String.fromEnvironment(
     'APP_ENV',
     defaultValue: 'dev',
@@ -13,12 +16,12 @@ class ApiConfig {
 
   static const String _devBaseUrl = String.fromEnvironment(
     'DEV_API_BASE_URL',
-    defaultValue: 'http://192.168.1.17:8081/api/v1',
+    defaultValue: _defaultBaseUrl,
   );
 
   static const String _prodBaseUrl = String.fromEnvironment(
     'PROD_API_BASE_URL',
-    defaultValue: 'https://api-mobile.rsudotista.my.id/api/v1',
+    defaultValue: _defaultBaseUrl,
   );
 
   static bool get isProd => appEnv.toLowerCase() == 'prod';

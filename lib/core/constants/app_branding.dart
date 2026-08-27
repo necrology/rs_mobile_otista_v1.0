@@ -2,6 +2,8 @@ class AppBranding {
   const AppBranding._();
 
   static const String appName = 'SIPANTES';
+  static const String appSubtitle =
+      'Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata';
   static const String hospitalShortName = 'RSUD Otista';
   static const String hospitalLongName =
       'RSUD Oto Iskandar Di Nata Kabupaten Bandung';
@@ -10,6 +12,10 @@ class AppBranding {
       'Jl. Raya Gading Tutuka, Desa Cingcin, Kec. Soreang, Kab. Bandung, Prov. Jawa Barat';
   static const String mapsUrl = 'https://maps.app.goo.gl/cMU1UvLw2dqoKAf48';
   static const String website = 'https://rsudotista.bandungkab.go.id/';
+  static const String privacyPolicyUrl =
+      'https://sipantes.maulana-gandawijaya.my.id/privacy-policy';
+  static const String accountDeletionUrl =
+      'https://sipantes.maulana-gandawijaya.my.id/account-deletion';
   static const String email = 'rsudotista@bandungkab.go.id';
   static const String phoneDisplay = '(022) 5891355';
   static const String phoneDial = '+62225891355';
@@ -23,6 +29,4 @@ class AppBranding {
       'MANTAP: Melayani, Akuntabel, Nyaman, Terdepan, Amanah, Profesional.';
   static const String serviceHours =
       'Rawat jalan dan poliklinik Senin-Sabtu pukul 08.00-14.00 WIB. IGD dan pendaftaran rawat inap buka 24 jam.';
-  static const String tagline =
-      'Layanan pasien digital yang ringkas, jelas, dan nyaman digunakan.';
 }

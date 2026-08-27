@@ -5,7 +5,7 @@ class MobileJknLauncher {
   const MobileJknLauncher._();
 
   static const MethodChannel _channel = MethodChannel(
-    'id.go.bandungkab.rsudotista.mobile/mobile_jkn',
+    'id.rsudotista.sipantes/mobile_jkn',
   );
 
   static final Uri _playStoreMarketUri = Uri.parse(

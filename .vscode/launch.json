@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "rs_mobile_otista_v1.0",
+            "name": "SIPANTES",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "rs_mobile_otista_v1.0 (profile mode)",
+            "name": "SIPANTES (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "rs_mobile_otista_v1.0 (release mode)",
+            "name": "SIPANTES (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

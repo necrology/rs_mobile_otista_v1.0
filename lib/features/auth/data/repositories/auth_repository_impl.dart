@@ -128,6 +128,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> requestAccountDeletion({required String password}) {
+    return _remoteDatasource.requestAccountDeletion(password: password);
+  }
+
+  @override
+  Future<void> confirmAccountDeletion({required String otp}) async {
+    await _remoteDatasource.confirmAccountDeletion(otp: otp);
+    _cachedIdentity = null;
+    await _secureStorage.clearSession();
+  }
+
+  @override
   Future<void> requestMedicalRecordClaim({
     required String password,
     required String noRm,

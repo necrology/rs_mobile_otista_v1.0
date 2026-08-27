@@ -118,6 +118,22 @@ class AuthRemoteDatasource {
     );
   }
 
+  Future<void> requestAccountDeletion({required String password}) async {
+    await _apiClient.post(
+      '/auth/account-deletion/request',
+      body: <String, Object?>{'password': password},
+      requiresAuth: true,
+    );
+  }
+
+  Future<void> confirmAccountDeletion({required String otp}) async {
+    await _apiClient.post(
+      '/auth/account-deletion/confirm',
+      body: <String, Object?>{'otp': otp},
+      requiresAuth: true,
+    );
+  }
+
   Future<void> requestMedicalRecordClaim({
     required String password,
     required String noRm,

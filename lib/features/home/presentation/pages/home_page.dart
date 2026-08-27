@@ -637,7 +637,7 @@ class _HomeHero extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.xSmall),
                       Text(
-                        AppBranding.hospitalLongName,
+                        AppBranding.appSubtitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

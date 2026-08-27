@@ -1,4 +1,4 @@
-package id.go.bandungkab.rsudotista.mobile
+package id.rsudotista.sipantes
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -8,7 +8,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    private val channelName = "id.go.bandungkab.rsudotista.mobile/mobile_jkn"
+    private val channelName = "id.rsudotista.sipantes/mobile_jkn"
     private val mobileJknPackage = "app.bpjs.mobile"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

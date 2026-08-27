@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#41AB9F",
     "theme_color": "#1A4540",
-    "description": "SIPANTES - Aplikasi mobile RSUD Oto Iskandar Di Nata Kabupaten Bandung.",
+    "description": "SIPANTES - Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -223,6 +223,16 @@ class _RegisterRepository implements AuthRepository {
   }
 
   @override
+  Future<void> requestAccountDeletion({required String password}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> confirmAccountDeletion({required String otp}) {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<PatientIdentity> setPassword({
     required String registrationTicket,
     required String password,

@@ -1,10 +1,12 @@
-# Panduan Integrasi Auth Bearer RSUD Otista Mobile
+# Panduan Integrasi Auth Bearer SIPANTES
 
-Dokumen ini menjelaskan integrasi aplikasi Flutter dengan API yang telah diamankan. Build produksi menggunakan base URL berikut secara default:
+Sistem Pendaftaran Terintegrasi RSUD Oto Iskandar Di Nata
+
+Dokumen ini menjelaskan integrasi aplikasi Flutter dengan API yang telah diamankan. Mode produksi, development, dan Android emulator menggunakan base URL berikut secara default:
 
 `https://api-mobile.rsudotista.my.id/api/v1`
 
-Base URL dapat diganti saat build menggunakan `--dart-define=API_BASE_URL=...`. Untuk build lokal, gunakan `--dart-define=APP_ENV=dev`; nilai bawaan development mengarah ke `http://10.0.2.2:8081/api/v1`.
+Base URL dapat diganti saat build menggunakan `--dart-define=API_BASE_URL=...`. Gunakan `--dart-define=DEV_API_BASE_URL=...` hanya bila perlu menguji server lokal.
 
 ## Kontrak autentikasi
 
