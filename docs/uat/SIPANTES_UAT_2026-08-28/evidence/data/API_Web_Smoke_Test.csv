@@ -1,0 +1,9 @@
+﻿Id,Pengujian,Method,URL,ExpectedHTTP,ActualHTTP,ContentType,TimeSeconds,FinalURL,Hasil,Keterangan
+API-01,Health API produksi,GET,https://api-mobile.rsudotista.my.id/api/v1/health,200,200,application/json,0.15,https://api-mobile.rsudotista.my.id/api/v1/health,LULUS,
+API-02,Daftar poli publik,GET,https://api-mobile.rsudotista.my.id/api/v1/polis?limit=1,200,200,application/json,0.148,https://api-mobile.rsudotista.my.id/api/v1/polis?limit=1,LULUS,
+API-03,Ketersediaan kamar publik,GET,https://api-mobile.rsudotista.my.id/api/v1/mobile/hospital/room-availabilities?limit=1,200,200,application/json,1.451,https://api-mobile.rsudotista.my.id/api/v1/mobile/hospital/room-availabilities?limit=1,LULUS,
+API-04,Endpoint sesi tanpa Bearer,GET,https://api-mobile.rsudotista.my.id/api/v1/auth/me,401,401,application/json,0.203,https://api-mobile.rsudotista.my.id/api/v1/auth/me,LULUS,Respons HTTP sesuai mekanisme keamanan
+WEB-01,Kebijakan privasi sementara,GET,https://sipantes.maulana-gandawijaya.my.id/privacy-policy,200,200,text/html; charset=utf-8,0.859,https://sipantes.maulana-gandawijaya.my.id/privacy-policy,LULUS,
+WEB-02,Penghapusan akun sementara,GET,https://sipantes.maulana-gandawijaya.my.id/account-deletion,200,200,text/html; charset=utf-8,0.61,https://sipantes.maulana-gandawijaya.my.id/account-deletion,LULUS,
+WEB-03,Kebijakan privasi domain API,GET,https://api-mobile.rsudotista.my.id/privacy-policy,200,200,text/html; charset=utf-8,0.17,https://api-mobile.rsudotista.my.id/privacy-policy,LULUS,
+WEB-04,Penghapusan akun domain API,GET,https://api-mobile.rsudotista.my.id/account-deletion,200,200,text/html; charset=utf-8,0.144,https://api-mobile.rsudotista.my.id/account-deletion,LULUS,

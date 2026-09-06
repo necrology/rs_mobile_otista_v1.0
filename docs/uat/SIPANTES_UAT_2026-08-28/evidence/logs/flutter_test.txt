@@ -1,0 +1,18 @@
+00:00 +0: loading C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart
+00:00 +0: C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart: ApiClient response contract rejects a 2xx JSON response that reports success false
+00:00 +1: C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart: ApiClient bearer session adds bearer only to protected requests
+00:00 +2: C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart: ApiClient bearer session serializes concurrent refresh and replays with rotated token
+00:00 +3: C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart: ApiClient bearer session invalid refresh clears session and emits expiration
+00:00 +4: C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart: ApiClient bearer session temporary refresh failure preserves stored session
+00:00 +5: C:/Source Flutter/rs_mobile_otista_v1.0/test/core/network/api_client_test.dart: ApiClient bearer session retries a protected request only once after refresh
+00:00 +6: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/api_data/protected_request_contract_test.dart: patient and booking requests derive identity only from bearer
+00:00 +7: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_cubit_account_deletion_test.dart: account deletion requests OTP and clears authenticated state
+00:00 +8: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: registration accepts the OTP request and validates OTP locally
+00:00 +9: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: registration accepts the OTP request and validates OTP locally
+00:00 +10: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: registration accepts the OTP request and validates OTP locally
+00:00 +11: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: registration accepts the OTP request and validates OTP locally
+00:00 +12: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: registration accepts the OTP request and validates OTP locally
+00:02 +13: C:/Source Flutter/rs_mobile_otista_v1.0/test/widget_test.dart: App shell loads with home services
+00:02 +14: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: existing account dialog navigates to Login and prefills email only
+00:02 +15: C:/Source Flutter/rs_mobile_otista_v1.0/test/features/auth/auth_page_test.dart: existing account dialog navigates to Lupa Password and prefills email
+00:02 +16: All tests passed!

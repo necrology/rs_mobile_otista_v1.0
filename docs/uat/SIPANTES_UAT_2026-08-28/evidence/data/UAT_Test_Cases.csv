@@ -1,0 +1,15 @@
+﻿ID,Modul,Skenario,Prasyarat,Langkah,Ekspektasi,Aktual,Status,Bukti
+UAT-001,Peluncuran,Membuka aplikasi SIPANTES,Aplikasi terpasang pada emulator.,Jalankan aplikasi dari launcher.,Aplikasi terbuka tanpa crash dan branding SIPANTES tampil.,Beranda tampil normal dengan judul SIPANTES.,LULUS,SS-01
+UAT-002,Sesi pengguna,Memulihkan sesi akun sintetis,Akun test pernah login.,Tutup dan buka ulang aplikasi.,Sesi tetap aktif dan identitas sintetis tampil.,"Indikator Akun Aktif dan sapaan Halo, test tampil.",LULUS,SS-01
+UAT-003,Beranda,Menampilkan menu layanan utama,Berada pada halaman Beranda.,Periksa kartu layanan dan navigasi bawah.,Menu utama dan navigasi tersedia serta mudah dikenali.,Menu layanan dan navigasi utama tampil tanpa error.,LULUS,SS-01
+UAT-004,Antrean umum,Membuka halaman pendaftaran antrean,Sesi pengguna aktif.,Pilih tab Booking/Antrean.,Halaman pendaftaran antrean dapat dibuka.,Halaman Antrean Umum dan tombol Buat tampil.,LULUS,SS-02
+UAT-005,Antrean umum,Menampilkan riwayat antrean kosong,Akun tidak memiliki antrean aktif.,Pilih tab Saya.,Sistem menampilkan empty state yang jelas.,Pesan belum ada history antrean umum tampil.,LULUS,SS-02
+UAT-006,Poli dan jadwal,Menampilkan daftar poli,API produksi dapat dijangkau.,Pilih tab Poli & Jadwal.,Daftar poli dan informasi jadwal tampil.,"Daftar poli, hari, jam, dan status praktik tampil.",LULUS,SS-03
+UAT-007,Poli dan jadwal,Menampilkan kontrol pencarian poli,Berada pada halaman Poli & Jadwal.,Periksa bidang pencarian dan tombol Cari.,Kontrol pencarian tersedia.,Bidang pencarian dan tombol Cari tampil aktif.,LULUS,SS-03
+UAT-008,Ketersediaan kamar,Menampilkan ringkasan tempat tidur,API kamar dapat dijangkau.,Buka menu Ketersediaan Kamar.,"Jumlah ruang aktif, total bed, dan bed kosong tampil.",Ringkasan kamar ditampilkan tanpa error.,LULUS,SS-04
+UAT-009,Ketersediaan kamar,Menampilkan rincian per kelas,Berada pada halaman Ketersediaan Kamar.,Periksa daftar kelas kamar.,"Rincian total, terisi, dan kosong tersedia.",Rincian per kelas tampil lengkap.,LULUS,SS-04
+UAT-010,Penghapusan akun,Menampilkan peringatan penghapusan permanen,Sesi pengguna aktif.,Pilih Profil > Hapus Akun.,Risiko dan cakupan data dijelaskan sebelum tindakan.,Peringatan permanen dan retensi rekam medis ditampilkan.,LULUS,SS-05
+UAT-011,Penghapusan akun,Memerlukan password sebelum OTP,Berada pada halaman Hapus Akun.,Periksa formulir verifikasi.,OTP tidak dapat diminta tanpa password.,Kolom password dan tombol Kirim OTP tersedia.,LULUS,SS-05
+UAT-012,API publik,"Memvalidasi health, poli, dan kamar",Internet tersedia.,Lakukan request GET tanpa kredensial.,Endpoint publik merespons HTTP 200.,"API-01, API-02, dan API-03 merespons HTTP 200.",LULUS,API-01 s.d. API-03
+UAT-013,Keamanan sesi,Menolak endpoint pengguna tanpa Bearer,Request tidak membawa access token.,GET /api/v1/auth/me.,Sistem menolak dengan HTTP 401.,Endpoint merespons HTTP 401.,LULUS,API-04
+UAT-014,Kepatuhan,Membuka kebijakan privasi dan penghapusan akun,Internet tersedia.,Akses URL sementara dan domain API.,Seluruh halaman publik dapat dibuka dengan HTTP 200.,WEB-01 sampai WEB-04 merespons HTTP 200.,LULUS,WEB-01 s.d. WEB-04

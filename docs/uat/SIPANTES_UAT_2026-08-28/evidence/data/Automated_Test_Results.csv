@@ -1,0 +1,17 @@
+﻿No,Pengujian,Hasil
+1,ApiClient menolak respons 2xx yang menyatakan success=false,LULUS
+2,Bearer hanya ditambahkan pada request terlindungi,LULUS
+3,Refresh token bersamaan diserialisasi dan request diputar ulang,LULUS
+4,Refresh tidak valid menghapus sesi dan memicu kedaluwarsa,LULUS
+5,Kegagalan refresh sementara mempertahankan sesi tersimpan,LULUS
+6,Request terlindungi hanya diulang satu kali setelah refresh,LULUS
+7,Payload registrasi memakai registration ticket dan kontrak auth diperkeras,LULUS
+8,Konflik akun terdaftar dipetakan menjadi hasil bertipe,LULUS
+9,Konflik registrasi lain tetap diteruskan,LULUS
+10,Respons auth tanpa pasangan token lengkap ditolak,LULUS
+11,Registrasi menerima permintaan OTP dan memvalidasi OTP lokal,LULUS
+12,Dialog akun terdaftar menuju Login dan hanya mengisi email,LULUS
+13,Dialog akun terdaftar menuju Lupa Password dan mengisi email,LULUS
+14,Penghapusan akun meminta OTP dan membersihkan state autentikasi,LULUS
+15,Request pasien dan booking mengambil identitas hanya dari Bearer,LULUS
+16,Shell aplikasi memuat layanan beranda,LULUS

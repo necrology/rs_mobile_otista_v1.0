@@ -1,0 +1,6 @@
+﻿Id,File,Jenis,Dimensi,UkuranBytes,SHA256,Keterangan
+SS-01,evidence/screenshots/01_beranda.png,Screenshot UAT,1080x1920,1069208,D2F025EE0423BB1C6C290127DFD95BB264EFD5DB100AB24035674CFC98141DDB,Beranda dan sesi akun sintetis
+SS-02,evidence/screenshots/02_pendaftaran_antrian.png,Screenshot UAT,1080x1920,331205,645230E1E1862C9F9B6487E6AECE34A9050D6B2BE5DFEA4A5798BB4513E1F6DF,Pendaftaran dan riwayat antrean umum
+SS-03,evidence/screenshots/03_poli_jadwal.png,Screenshot UAT,1080x1920,321623,4FD8217B813AA7940053140C290C89BDEE24843C5ED96B0A176D183F8DCB8E4D,Daftar poli dan jadwal praktik
+SS-04,evidence/screenshots/04_ketersediaan_kamar.png,Screenshot UAT,1080x1920,307381,F42872790A248BD54FFB331F83FFD56E2ED19D2761784DF1E96B35DDEF896159,Ketersediaan kamar rawat inap
+SS-05,evidence/screenshots/05_hapus_akun.png,Screenshot UAT,1080x1920,317441,BCC031405788DB605BD6B939CE4F559E563A9F92A32AB30A2061D0991A4A5853,Penghapusan akun dengan verifikasi

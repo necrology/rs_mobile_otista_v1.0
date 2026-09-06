@@ -1,0 +1,7 @@
+PDF: C:\Source Flutter\rs_mobile_otista_v1.0\docs\uat\SIPANTES_UAT_2026-08-28\Dokumen_UAT_SIPANTES_v1.0.pdf
+Pages: 15
+Images: 6
+Garamond detected: YES
+Fonts: BCDEEE+Garamond, BCDFEE+Garamond-Bold, BCDGEE+Calibri-Bold, BCDHEE+TimesNewRomanPSMT, BCDIEE+ArialMT, BCDJEE+SymbolMT, BCDKEE+Garamond-Italic
+Conversion output: PAGES=15
+PDF SHA-256: D82C3A79927C60076F8EDA51CA429EBE1EB2E47156359BFCF3127B028C0D6750

@@ -1,0 +1,10 @@
+Nama aplikasi : SIPANTES
+Package ID    : id.rsudotista.sipantes
+Versi         : 1.0.0+3
+Branch        : main
+Commit        : 44fad938665daad7b85a6b09f69fe4c299f1bd12
+AAB           : C:\Source Flutter\rs_mobile_otista_v1.0\build\app\outputs\bundle\release\app-release.aab
+Ukuran AAB    : 44.66 MB
+SHA-256 AAB   : 35C2959F7D3D707512D807F5E3180F7CB5B11B6744517FDFCD4404371686EF59
+Flutter analyze: LULUS
+Flutter test: 16/16 LULUS
