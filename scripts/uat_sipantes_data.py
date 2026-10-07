@@ -230,8 +230,6 @@ API_CHECKS = [
     ("API-02", "Daftar poli publik", "https://api-mobile.rsudotista.my.id/api/v1/polis?limit=1", 200),
     ("API-03", "Ketersediaan kamar publik", "https://api-mobile.rsudotista.my.id/api/v1/mobile/hospital/room-availabilities?limit=1", 200),
     ("API-04", "Endpoint sesi tanpa Bearer", "https://api-mobile.rsudotista.my.id/api/v1/auth/me", 401),
-    ("WEB-01", "Kebijakan privasi sementara", "https://sipantes.maulana-gandawijaya.my.id/privacy-policy", 200),
-    ("WEB-02", "Penghapusan akun sementara", "https://sipantes.maulana-gandawijaya.my.id/account-deletion", 200),
-    ("WEB-03", "Kebijakan privasi domain API", "https://api-mobile.rsudotista.my.id/privacy-policy", 200),
-    ("WEB-04", "Penghapusan akun domain API", "https://api-mobile.rsudotista.my.id/account-deletion", 200),
+    ("WEB-01", "Kebijakan privasi", "https://api-mobile.rsudotista.my.id/privacy-policy", 200),
+    ("WEB-02", "Penghapusan akun", "https://api-mobile.rsudotista.my.id/account-deletion", 200),
 ]

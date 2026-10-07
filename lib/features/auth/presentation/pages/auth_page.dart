@@ -44,6 +44,10 @@ class _AuthPageState extends State<AuthPage> {
   bool _loginOtpSent = false;
   bool _registerOtpSent = false;
   bool _resetOtpSent = false;
+  bool _showLoginPassword = false;
+  bool _showRegisterPassword = false;
+  bool _showResetPassword = false;
+  String? _pendingRegistrationEmail;
 
   @override
   void dispose() {
@@ -148,16 +152,31 @@ class _AuthPageState extends State<AuthPage> {
                                         ),
                                         TextField(
                                           controller: _loginPasswordController,
-                                          obscureText: true,
+                                          obscureText: !_showLoginPassword,
                                           textInputAction: _loginOtpSent
                                               ? TextInputAction.next
                                               : TextInputAction.done,
-                                          decoration: const InputDecoration(
+                                          decoration: InputDecoration(
                                             labelText: 'Password',
                                             hintText:
                                                 'Masukkan password akun pasien',
-                                            prefixIcon: Icon(
+                                            prefixIcon: const Icon(
                                               Icons.lock_outline_rounded,
+                                            ),
+                                            suffixIcon: IconButton(
+                                              tooltip: _showLoginPassword
+                                                  ? 'Sembunyikan password'
+                                                  : 'Tampilkan password',
+                                              onPressed: () => setState(() {
+                                                _showLoginPassword =
+                                                    !_showLoginPassword;
+                                              }),
+                                              icon: Icon(
+                                                _showLoginPassword
+                                                    ? Icons
+                                                          .visibility_off_outlined
+                                                    : Icons.visibility_outlined,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -247,6 +266,7 @@ class _AuthPageState extends State<AuthPage> {
                                       children: <Widget>[
                                         TextField(
                                           controller: _registerNameController,
+                                          enabled: !_registerOtpSent,
                                           textInputAction: TextInputAction.next,
                                           decoration: const InputDecoration(
                                             labelText: 'Nama lengkap',
@@ -262,6 +282,7 @@ class _AuthPageState extends State<AuthPage> {
                                         ),
                                         TextField(
                                           controller: _registerEmailController,
+                                          enabled: !_registerOtpSent,
                                           keyboardType:
                                               TextInputType.emailAddress,
                                           textInputAction: TextInputAction.next,
@@ -278,6 +299,7 @@ class _AuthPageState extends State<AuthPage> {
                                         ),
                                         TextField(
                                           controller: _registerPhoneController,
+                                          enabled: !_registerOtpSent,
                                           keyboardType: TextInputType.phone,
                                           textInputAction: TextInputAction.next,
                                           decoration: const InputDecoration(
@@ -294,16 +316,31 @@ class _AuthPageState extends State<AuthPage> {
                                         TextField(
                                           controller:
                                               _registerPasswordController,
-                                          obscureText: true,
+                                          obscureText: !_showRegisterPassword,
                                           textInputAction: _registerOtpSent
                                               ? TextInputAction.next
                                               : TextInputAction.done,
-                                          decoration: const InputDecoration(
+                                          decoration: InputDecoration(
                                             labelText: 'Password',
                                             hintText:
                                                 '8–72 karakter, huruf dan angka',
-                                            prefixIcon: Icon(
+                                            prefixIcon: const Icon(
                                               Icons.lock_outline_rounded,
+                                            ),
+                                            suffixIcon: IconButton(
+                                              tooltip: _showRegisterPassword
+                                                  ? 'Sembunyikan password'
+                                                  : 'Tampilkan password',
+                                              onPressed: () => setState(() {
+                                                _showRegisterPassword =
+                                                    !_showRegisterPassword;
+                                              }),
+                                              icon: Icon(
+                                                _showRegisterPassword
+                                                    ? Icons
+                                                          .visibility_off_outlined
+                                                    : Icons.visibility_outlined,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -322,6 +359,48 @@ class _AuthPageState extends State<AuthPage> {
                                                 Icons.mark_email_read_outlined,
                                               ),
                                             ),
+                                          ),
+                                          const SizedBox(
+                                            height: AppSpacing.small,
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: TextButton.icon(
+                                                  key: const Key(
+                                                    'resend-registration-otp',
+                                                  ),
+                                                  onPressed: state.isSubmitting
+                                                      ? null
+                                                      : () =>
+                                                            _resendRegistrationOtp(
+                                                              authCubit,
+                                                            ),
+                                                  icon: const Icon(
+                                                    Icons.refresh_rounded,
+                                                  ),
+                                                  label: const Text(
+                                                    'Kirim ulang OTP',
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: TextButton.icon(
+                                                  key: const Key(
+                                                    'change-registration-data',
+                                                  ),
+                                                  onPressed: state.isSubmitting
+                                                      ? null
+                                                      : _resetRegistrationOtp,
+                                                  icon: const Icon(
+                                                    Icons.edit_outlined,
+                                                  ),
+                                                  label: const Text(
+                                                    'Ganti data',
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ],
@@ -385,6 +464,9 @@ class _AuthPageState extends State<AuthPage> {
                                                   .otpSent) {
                                             setState(() {
                                               _registerOtpSent = true;
+                                              _pendingRegistrationEmail = email
+                                                  .toLowerCase();
+                                              _registerOtpController.clear();
                                             });
                                             showAppSnackBar(
                                               context,
@@ -409,7 +491,9 @@ class _AuthPageState extends State<AuthPage> {
 
                                         final bool isSuccess = await authCubit
                                             .verifyRegistrationOtp(
-                                              email: email,
+                                              email:
+                                                  _pendingRegistrationEmail ??
+                                                  email,
                                               otp: registrationOtp,
                                               password: password,
                                             );
@@ -478,13 +562,29 @@ class _AuthPageState extends State<AuthPage> {
                                           TextField(
                                             controller:
                                                 _forgotPasswordController,
-                                            obscureText: true,
+                                            obscureText: !_showResetPassword,
                                             textInputAction:
                                                 TextInputAction.done,
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
                                               labelText: 'Password baru',
-                                              prefixIcon: Icon(
+                                              prefixIcon: const Icon(
                                                 Icons.lock_reset_rounded,
+                                              ),
+                                              suffixIcon: IconButton(
+                                                tooltip: _showResetPassword
+                                                    ? 'Sembunyikan password'
+                                                    : 'Tampilkan password',
+                                                onPressed: () => setState(() {
+                                                  _showResetPassword =
+                                                      !_showResetPassword;
+                                                }),
+                                                icon: Icon(
+                                                  _showResetPassword
+                                                      ? Icons
+                                                            .visibility_off_outlined
+                                                      : Icons
+                                                            .visibility_outlined,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -604,6 +704,49 @@ class _AuthPageState extends State<AuthPage> {
 
   bool _isValidOtp(String otp) => RegExp(r'^\d{6}$').hasMatch(otp);
 
+  Future<void> _resendRegistrationOtp(AuthCubit authCubit) async {
+    final String fullName = _registerNameController.text.trim();
+    final String email = _registerEmailController.text.trim();
+    final String phone = _registerPhoneController.text.trim();
+
+    final RegistrationRequestResult? result = await authCubit.register(
+      fullName: fullName,
+      email: email,
+      phoneNumber: phone,
+    );
+    if (!mounted) {
+      return;
+    }
+    if (result == RegistrationRequestResult.otpSent) {
+      setState(() {
+        _pendingRegistrationEmail = email.toLowerCase();
+        _registerOtpController.clear();
+      });
+      showAppSnackBar(
+        context,
+        'OTP registrasi baru telah dikirim. OTP sebelumnya tidak berlaku.',
+      );
+      return;
+    }
+    if (result == RegistrationRequestResult.accountAlreadyRegistered) {
+      _resetRegistrationOtp();
+      await _showExistingAccountDialog(context, email);
+      return;
+    }
+    showAppSnackBar(
+      context,
+      authCubit.state.errorMessage ?? 'OTP belum berhasil dikirim ulang.',
+    );
+  }
+
+  void _resetRegistrationOtp() {
+    setState(() {
+      _registerOtpSent = false;
+      _pendingRegistrationEmail = null;
+      _registerOtpController.clear();
+    });
+  }
+
   Future<void> _showExistingAccountDialog(
     BuildContext pageContext,
     String email,
@@ -648,6 +791,7 @@ class _AuthPageState extends State<AuthPage> {
 
     setState(() {
       _registerOtpSent = false;
+      _pendingRegistrationEmail = null;
       _registerOtpController.clear();
       _registerPasswordController.clear();
 

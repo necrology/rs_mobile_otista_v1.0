@@ -13,9 +13,9 @@ class AppBranding {
   static const String mapsUrl = 'https://maps.app.goo.gl/cMU1UvLw2dqoKAf48';
   static const String website = 'https://rsudotista.bandungkab.go.id/';
   static const String privacyPolicyUrl =
-      'https://sipantes.maulana-gandawijaya.my.id/privacy-policy';
+      'https://api-mobile.rsudotista.my.id/privacy-policy';
   static const String accountDeletionUrl =
-      'https://sipantes.maulana-gandawijaya.my.id/account-deletion';
+      'https://api-mobile.rsudotista.my.id/account-deletion';
   static const String email = 'rsudotista@bandungkab.go.id';
   static const String phoneDisplay = '(022) 5891355';
   static const String phoneDial = '+62225891355';

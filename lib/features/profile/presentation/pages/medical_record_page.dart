@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_spacing.dart';
@@ -24,6 +24,7 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
   final TextEditingController _otpController = TextEditingController();
 
   bool _otpSent = false;
+  bool _showPassword = false;
 
   @override
   void dispose() {
@@ -153,13 +154,28 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
                         TextField(
                           controller: _passwordController,
                           enabled: !_otpSent,
-                          obscureText: true,
+                          obscureText: !_showPassword,
                           textInputAction: _otpSent
                               ? TextInputAction.next
                               : TextInputAction.done,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Password akun',
-                            prefixIcon: Icon(Icons.lock_outline_rounded),
+                            prefixIcon: const Icon(Icons.lock_outline_rounded),
+                            suffixIcon: IconButton(
+                              tooltip: _showPassword
+                                  ? 'Sembunyikan password'
+                                  : 'Tampilkan password',
+                              onPressed: _otpSent
+                                  ? null
+                                  : () => setState(() {
+                                      _showPassword = !_showPassword;
+                                    }),
+                              icon: Icon(
+                                _showPassword
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                              ),
+                            ),
                           ),
                         ),
                         if (_otpSent) ...<Widget>[
@@ -282,11 +298,3 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
     Navigator.of(context).pop();
   }
 }
-
-
-
-
-
-
-
-

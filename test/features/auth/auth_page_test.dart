@@ -8,6 +8,24 @@ import 'package:rs_mobile_otista_v1_0/features/auth/presentation/cubit/auth_cubi
 import 'package:rs_mobile_otista_v1_0/features/auth/presentation/pages/auth_page.dart';
 
 void main() {
+  testWidgets('password visibility button toggles registration password', (
+    WidgetTester tester,
+  ) async {
+    await _pumpRegisterPage(tester);
+
+    TextField passwordField = tester.widget<TextField>(
+      _fieldWithLabel('Password'),
+    );
+    expect(passwordField.obscureText, isTrue);
+
+    await tester.tap(find.byTooltip('Tampilkan password'));
+    await tester.pump();
+
+    passwordField = tester.widget<TextField>(_fieldWithLabel('Password'));
+    expect(passwordField.obscureText, isFalse);
+    expect(find.byTooltip('Sembunyikan password'), findsOneWidget);
+  });
+
   testWidgets('registration accepts the OTP request and validates OTP locally', (
     WidgetTester tester,
   ) async {
@@ -35,6 +53,39 @@ void main() {
     expect(find.text('OTP harus terdiri dari 6 digit angka.'), findsOneWidget);
     expect(repository.verifyOtpCallCount, 0);
   });
+
+  testWidgets(
+    'registration can resend OTP or unlock data for a fresh attempt',
+    (WidgetTester tester) async {
+      final _RegisterRepository repository = await _pumpRegisterPage(tester);
+      await _submitRegistration(tester, email: 'testing@example.com');
+
+      expect(
+        tester.widget<TextField>(_fieldWithLabel('Email')).enabled,
+        isFalse,
+      );
+      expect(find.byKey(const Key('resend-registration-otp')), findsOneWidget);
+      expect(find.byKey(const Key('change-registration-data')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('resend-registration-otp')));
+      await tester.pumpAndSettle();
+      expect(repository.registerCallCount, 2);
+      expect(
+        find.text(
+          'OTP registrasi baru telah dikirim. OTP sebelumnya tidak berlaku.',
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byKey(const Key('change-registration-data')));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<TextField>(_fieldWithLabel('Email')).enabled,
+        isTrue,
+      );
+      expect(_fieldWithLabel('OTP Email'), findsNothing);
+    },
+  );
 
   testWidgets(
     'existing account dialog navigates to Login and prefills email only',

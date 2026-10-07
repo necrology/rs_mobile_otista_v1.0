@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/constants/app_branding.dart';
 import 'core/network/api_client.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/app_update_prompt.dart';
 import 'features/api_data/data/datasources/rs_api_remote_datasource.dart';
 import 'features/api_data/data/repositories/rs_api_repository_impl.dart';
 import 'features/api_data/domain/repositories/rs_api_repository.dart';
@@ -77,7 +78,7 @@ class RsMobileApp extends StatelessWidget {
           title: AppBranding.appName,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
-          home: const SplashGatePage(),
+          home: const AppUpdatePrompt(child: SplashGatePage()),
         ),
       ),
     );

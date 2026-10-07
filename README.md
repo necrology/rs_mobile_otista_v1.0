@@ -26,7 +26,7 @@ Konfigurasi API:
 
 Kebijakan dan penghapusan akun:
 
-- Kebijakan privasi: `https://sipantes.maulana-gandawijaya.my.id/privacy-policy`
-- Penghapusan akun web: `https://sipantes.maulana-gandawijaya.my.id/account-deletion`
+- Kebijakan privasi: `https://api-mobile.rsudotista.my.id/privacy-policy`
+- Penghapusan akun web: `https://api-mobile.rsudotista.my.id/account-deletion`
 - Penghapusan dari aplikasi tersedia pada `Profil & Akun > Hapus Akun` setelah login.
 - Penghapusan akun melepaskan identitas akun mobile dan sesi login, tetapi tidak menghapus rekam medis serta dokumen pelayanan rumah sakit.

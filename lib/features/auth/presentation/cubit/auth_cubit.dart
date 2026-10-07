@@ -125,6 +125,10 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String phoneNumber,
   }) async {
+    // A new OTP request starts a new registration attempt. Never reuse a
+    // ticket obtained from an older OTP, even when the email is unchanged.
+    _pendingRegistrationEmail = null;
+    _pendingRegistrationTicket = null;
     emit(state.copyWith(isSubmitting: true, errorMessage: null));
 
     try {
@@ -184,6 +188,11 @@ class AuthCubit extends Cubit<AuthState> {
       );
       return true;
     } catch (error) {
+      if (error is ApiException &&
+          error.message.toLowerCase().contains('registration ticket')) {
+        _pendingRegistrationEmail = null;
+        _pendingRegistrationTicket = null;
+      }
       emit(
         state.copyWith(
           isSubmitting: false,

@@ -19,6 +19,7 @@ class _AccountDeletionPageState extends State<AccountDeletionPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   bool _otpSent = false;
+  bool _showPassword = false;
 
   @override
   void dispose() {
@@ -103,12 +104,27 @@ class _AccountDeletionPageState extends State<AccountDeletionPage> {
                           TextField(
                             key: const Key('account-deletion-password'),
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: !_showPassword,
                             enabled: !authState.isSubmitting,
                             textInputAction: TextInputAction.done,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Password akun',
-                              prefixIcon: Icon(Icons.lock_outline_rounded),
+                              prefixIcon: const Icon(
+                                Icons.lock_outline_rounded,
+                              ),
+                              suffixIcon: IconButton(
+                                tooltip: _showPassword
+                                    ? 'Sembunyikan password'
+                                    : 'Tampilkan password',
+                                onPressed: () => setState(() {
+                                  _showPassword = !_showPassword;
+                                }),
+                                icon: Icon(
+                                  _showPassword
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                ),
+                              ),
                             ),
                             onSubmitted: (_) => _requestOtp(),
                           )
