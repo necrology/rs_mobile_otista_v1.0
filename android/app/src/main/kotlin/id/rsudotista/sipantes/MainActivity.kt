@@ -3,6 +3,8 @@ package id.rsudotista.sipantes
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -10,6 +12,11 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private val channelName = "id.rsudotista.sipantes/mobile_jkn"
     private val mobileJknPackage = "app.bpjs.mobile"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.enableEdgeToEdge(window)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

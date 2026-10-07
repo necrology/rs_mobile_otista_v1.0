@@ -529,6 +529,8 @@ class _HomeHero extends StatelessWidget {
     final String greetingName = authState.identity?.fullName.isNotEmpty == true
         ? authState.identity!.fullName
         : 'Tamu';
+    final double topInset = MediaQuery.viewPaddingOf(context).top;
+    final double heroTopPadding = topInset < 32 ? 52 : topInset + 20;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, AppSpacing.medium),
@@ -579,7 +581,7 @@ class _HomeHero extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 52, 18, 20),
+                  padding: EdgeInsets.fromLTRB(18, heroTopPadding, 18, 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[

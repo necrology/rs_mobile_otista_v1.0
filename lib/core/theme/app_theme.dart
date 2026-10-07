@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
@@ -66,6 +67,11 @@ class AppTheme {
         backgroundColor: AppColors.scaffoldBackground,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.cardBackground,

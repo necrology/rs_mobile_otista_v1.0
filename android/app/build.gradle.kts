@@ -60,11 +60,21 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             if (keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
     }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.17.0")
 }
 
 flutter {
