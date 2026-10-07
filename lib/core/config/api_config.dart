@@ -1,10 +1,10 @@
 class ApiConfig {
   const ApiConfig._();
 
-  // static const String _defaultBaseUrl =
-  //     'https://api-mobile.rsudotista.my.id/api/v1';
   static const String _defaultBaseUrl =
-      'https://otista.maulana-gandawijaya.my.id/api/v1';
+      'https://api-mobile.rsudotista.my.id/api/v1';
+  // static const String _defaultBaseUrl =
+  //     'https://otista.maulana-gandawijaya.my.id/api/v1';
 
   static const String appEnv = String.fromEnvironment(
     'APP_ENV',
